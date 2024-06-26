@@ -8,14 +8,20 @@ from django.contrib.auth import get_user_model
 
 
 class RegisterForm(UserCreationForm):
-    email=forms.CharField(widget=forms.EmailInput(attrs={"placeholder": "Enter email-address", "class": "form-control"}))
-    username=forms.CharField(widget=forms.TextInput(attrs={"placeholder": "Enter username", "class": "form-control"}))
-    password1=forms.CharField(label="Password", widget=forms.PasswordInput(attrs={"placeholder": "Enter password", "class": "form-control"}))
-    password2=forms.CharField(label="Confirm Password", widget=forms.PasswordInput(attrs={"placeholder": "Confirm password", "class": "form-control"}))
+    email = forms.EmailField(widget=forms.EmailInput(attrs={"placeholder": "Enter email-address", "class": "form-control"}))
+    username = forms.CharField(widget=forms.TextInput(attrs={"placeholder": "Enter username", "class": "form-control"}))
+    phone_number = forms.CharField(widget=forms.TextInput(attrs={"placeholder": "Enter phone number", "class": "form-control"}))
+    full_name = forms.CharField(widget=forms.TextInput(attrs={"placeholder": "Enter full name", "class": "form-control"}))
+    date_of_birth = forms.DateField(widget=forms.DateInput(attrs={"type": "date", "class": "form-control"}))
+    id_number = forms.CharField(widget=forms.TextInput(attrs={"placeholder": "Enter ID number", "class": "form-control"}))
+    sex = forms.ChoiceField(choices=[('', 'Select Gender'), ('M', 'Male'), ('F', 'Female')],widget=forms.Select(attrs={"class": "form-control"}))
+    physical_address = forms.CharField(widget=forms.Textarea(attrs={"placeholder": "Enter physical address", "class": "form-control", "rows": 3}))
+    password1 = forms.CharField(label="Password", widget=forms.PasswordInput(attrs={"placeholder": "Enter password", "class": "form-control"}))
+    password2 = forms.CharField(label="Confirm Password", widget=forms.PasswordInput(attrs={"placeholder": "Confirm password", "class": "form-control"}))
     
     class Meta:
         model = get_user_model()
-        fields = ["email", "username", "password1", "password2"]
+        fields = ["email", "username", "phone_number", "full_name", "date_of_birth", "id_number", "sex", "physical_address", "password1", "password2"]
 
 class LoginForm(AuthenticationForm):
     username = forms.CharField(widget=forms.EmailInput(attrs={"placeholder": "Enter email-address", "class": "form-control"}))

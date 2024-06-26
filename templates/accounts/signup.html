@@ -30,19 +30,84 @@
                                 <p class="text-center small">Enter your personal details to create account</p>
                             </div>
 
-                            <form action="" method='POST' class="row g-3 needs-validation" novalidate>
+                            <form method="post" class="row g-3 needs-validation" novalidate>
                                 {% csrf_token %}
-                                
-                                {% for field in form %}
-                                    <div class="col-12">
-                                        <label class="form-label">{{ field.label }}</label>
-                                        {{ field }}
-                                        {% if field.errors %}
-                                            <small class="text-danger">{{ field.errors }}</small>
-                                        {% endif %}
+                                {% if form.non_field_errors %}
+                                    {% for error in form.non_field_errors %}
+                                        <small class="text-danger mb-3">{{ error }}</small>
+                                    {% endfor %}
+                                {% endif %}
+
+                                <div class="col-12">
+                                    <label for="yourFullName" class="form-label">Full Name</label>
+                                    {{ form.full_name }}
+                                    <div class="invalid-feedback">Please enter your full name!</div>
+                                </div>
+
+                                <div class="col-12">
+                                    <label for="yourDateOfBirth" class="form-label">Date of Birth</label>
+                                    {{ form.date_of_birth }}
+                                    <div class="invalid-feedback">Please enter your date of birth!</div>
+                                </div>
+
+                                <div class="col-12">
+                                    <label for="yourIdNumber" class="form-label">ID Number</label>
+                                    {{ form.id_number }}
+                                    <div class="invalid-feedback">Please enter your ID number!</div>
+                                </div>
+
+                                <div class="col-12">
+                                    <label for="yourSex" class="form-label">Sex</label>
+                                    {{ form.sex }}
+                                    <div class="invalid-feedback">Please select your sex!</div>
+                                </div>
+
+                                <div class="col-12">
+                                    <label for="yourPhysicalAddress" class="form-label">Physical Address</label>
+                                    {{ form.physical_address }}
+                                    <div class="invalid-feedback">Please enter your physical address!</div>
+                                </div>
+
+                                <div class="col-12">
+                                    <label for="yourPhoneNumber" class="form-label">Phone Number</label>
+                                    {{ form.phone_number }}
+                                    <div class="invalid-feedback">Please enter your phone number!</div>
+                                </div>
+                            
+                                <div class="col-12">
+                                    <label for="yourEmail" class="form-label">Email Address</label>
+                                    {{ form.email }}
+                                    <div class="invalid-feedback">Please enter a valid Email address!</div>
+                                </div>
+                            
+                                <div class="col-12">
+                                    <label for="yourUsername" class="form-label">Username</label>
+                                    <div class="input-group has-validation">
+                                        {{ form.username }}
+                                        <div class="invalid-feedback">Please choose a username.</div>
                                     </div>
-                                {% endfor %}
-                                
+                                </div>
+                            
+                                <div class="col-12">
+                                    <label for="yourPassword" class="form-label">Password</label>
+                                    {{ form.password1 }}
+                                    <div class="invalid-feedback">Please enter your password!</div>
+                                </div>
+                            
+                                <div class="col-12">
+                                    <label for="yourPassword2" class="form-label">Confirm Password</label>
+                                    {{ form.password2 }}
+                                    <div class="invalid-feedback">Please confirm your password!</div>
+                                </div>
+                            
+                                <div class="col-12">
+                                    <div class="form-check">
+                                        <input class="form-check-input" name="terms" type="checkbox" value="" id="acceptTerms" required>
+                                        <label class="form-check-label" for="acceptTerms">I agree and accept the <a href="#">terms and conditions</a></label>
+                                        <div class="invalid-feedback">You must agree before submitting.</div>
+                                    </div>
+                                </div>
+                            
                                 <div class="col-12">
                                     <button class="btn btn-primary w-100" type="submit">Create Account</button>
                                 </div>
