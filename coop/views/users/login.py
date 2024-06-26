@@ -10,7 +10,7 @@ from ...models import OtpToken
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.core.mail import send_mail
-from django.contrib.auth import authenticate, login 
+from django.contrib.auth import authenticate, login,logout
 
 
 
@@ -59,4 +59,5 @@ def loginPage(request):
 
 def user_logout_view(request):
   logout(request)
+  request.session.delete()
   return redirect('/login')
