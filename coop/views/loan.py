@@ -21,31 +21,42 @@ def loan_apply(request):
     return render(request,'pages/loan/apply.html')
 
 @login_required
+
 def loan_application(request):
+    user = request.user
+    
+    # Redirect to loan status if the user has an outstanding loan
+    outstanding_loan = LoanApplication.objects.filter(borrower=user, status='outstanding').first()
+    if outstanding_loan:
+        return redirect('loan-status', pk=outstanding_loan.pk)
+    
     if request.method == 'POST':
         form = LoanApplicationForm(request.POST)
         if form.is_valid():
-            # Retrieve logged-in user
+            # Retrieve form data
+            loan_data = form.cleaned_data
             borrower = request.user
-            
-            # Check if the user has an outstanding loan
-            outstanding_loan = LoanApplication.objects.filter(borrower=borrower, status='outstanding').exists()
-            if outstanding_loan:
+
+            # Check if the user already has an outstanding loan
+            if LoanApplication.objects.filter(borrower=borrower, status='outstanding').exists():
                 messages.error(request, "You cannot apply for a new loan while you have an outstanding loan.")
                 return redirect('loan-application')
             
-            # Serialize borrower's identifier (e.g., id or username) to store in session
-            borrower_identifier = borrower.id  # Assuming id is a unique identifier
-            
-            # Temporarily save form data and borrower identifier to session for confirmation
-            loan_data = form.cleaned_data.copy()
-            loan_data['amount'] = float(loan_data['amount'])
-            loan_data['borrower'] = borrower_identifier  # Store identifier, not the object
-            
+            # Prepare loan data for session
+            loan_data['borrower'] = borrower.id  # Store borrower id for reference
+            loan_data['amount'] = float(loan_data['amount'])  # Convert amount to float
+
+            # Store the data in session for confirmation
             request.session['loan_data'] = loan_data
+            
+            # Redirect to confirmation page
             return redirect('loan-confirm')
+        else:
+            messages.error(request, "Please correct the errors below.")
     else:
         form = LoanApplicationForm()
+
+    # Render loan application form
     return render(request, 'pages/loan/application.html', {'form': form})
 
 @login_required
