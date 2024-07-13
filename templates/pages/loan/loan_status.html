@@ -1,0 +1,51 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block title %} Loan | Status {% endblock title %}
+
+{% block extrastyle %}
+
+{% endblock extrastyle %}
+
+{% block bodyclass %} hold-transition sidebar-mini layout-fixed {% endblock bodyclass %}
+
+{% block content %}
+
+  <div class="pagetitle">
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Home</a></li>
+        <li class="breadcrumb-item active">Loan</li>
+        <li class="breadcrumb-item active">Status</li>
+      </ol>
+    </nav>
+  </div><!-- End Page Title -->
+  <section class="section">
+    <div class="row">
+      <div class="col-lg-12">
+
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Loan Status</h5>
+
+            <!-- Custom Styled Validation with Tooltips -->
+
+            <p>Outstanding Amount: ${{ loan_status.outstanding_amount }}</p>
+            <p>Due Date: {{ loan_status.due_date }}</p>
+            <p>Total to be Repaid: ${{ loan_status.total_to_be_repaid }}</p>
+            <p>Summary Interest: ${{ loan_status.summary_interest }}</p>
+            <p>Overdue Management Fee: ${{ loan_status.overdue_mgt_fee }}</p>
+            <p>Late Interest: ${{ loan_status.late_interest }}</p>
+            <p>Partial Payment: ${{ loan_status.partial_payment }}</p>
+            
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+{% endblock content %}
+
+{% block extra_scripts %}
+
+{% endblock extra_scripts %}

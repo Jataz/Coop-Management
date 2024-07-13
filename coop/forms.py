@@ -4,7 +4,9 @@ from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import get_user_model 
+from django.contrib.auth import get_user_model
+
+from .models import LoanApplication 
 
 
 class RegisterForm(UserCreationForm):
@@ -34,5 +36,15 @@ class LoginForm(AuthenticationForm):
         ),
         'inactive': "This account is inactive.",
     }
+    
+
+class LoanApplicationForm(forms.ModelForm):
+    class Meta:
+        model = LoanApplication
+        fields = ['mobile_account', 'amount', 'term_months', 'agreed_to_terms']
+        widgets = {
+            'term_months': forms.NumberInput(attrs={'min': 1}),
+            'due_date': forms.DateInput(attrs={'type': 'date'}),
+        }
 
     

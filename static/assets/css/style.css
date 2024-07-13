@@ -1231,3 +1231,16 @@ h6 {
   font-size: 13px;
   color: #012970;
 }
+
+.float-right {
+  float: right;
+  /* Additional styles to ensure proper alignment and layout */
+  text-align: right;
+  margin: 0;
+  padding: 0;
+}
+
+.pagetitl {
+  display: inline-block; /* Ensure the element is not stretched full-width */
+  width: auto; /* Adjust width as needed */
+}

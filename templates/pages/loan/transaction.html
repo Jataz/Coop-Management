@@ -1,0 +1,85 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block title %} Loan | Transactions {% endblock title %}
+
+{% block extrastyle %}
+
+{% endblock extrastyle %}
+
+{% block bodyclass %} hold-transition sidebar-mini layout-fixed {% endblock bodyclass %}
+
+{% block content %}
+
+  <div class="pagetitle">
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Home</a></li>
+        <li class="breadcrumb-item active">Loan</li>
+        <li class="breadcrumb-item active">Transactions</li>
+      </ol>
+    </nav>
+  </div><!-- End Page Title -->
+  <section class="section">
+    <div class="row">
+      <div class="col-lg-12">
+
+        <div class="card">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+              <h5 class="card-title">Loan Transactions</h5>
+              <div>
+                  <a  class="btn btn-outline-success btn-sm" href="{% url 'loan-application' %}" >
+                      <i class="ri-add-fill"></i> Apply for loan
+                  </a>
+              </div>
+            </div>
+          
+
+            <!-- Table with stripped rows -->
+            <table class="table datatable">
+              <thead>
+                <tr>
+                  <th>No.</th>
+                  <th>Application Date</th>
+                  <th>Amount</th>
+                  <th>Duration (M)</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for loan in loans %}
+                  <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ loan.application_date }}</td>
+                    <td>{{ loan.amount }}</td>
+                    <td>{{ loan.term_months }}</td>
+                    <td><span style="color: green;">{{ loan.status }}</span></td>
+                    <td>
+                      <a href="{% url 'loan-status' pk=loan.pk %}">
+                        <span class="badge border-primary border-1 text-primary">View Details</span>
+                      </a>
+                      {% if loan.status == 'outstanding' %}
+                      <a href="{% url 'loan-repay' pk=loan.pk %}">
+                        <span class="badge border-primary border-1 text-primary">Make Payment</span>
+                      </a>
+                    {% endif %}
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+            <!-- End Table with stripped rows -->
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+{% endblock content %}
+
+{% block extra_scripts %}
+
+{% endblock extra_scripts %}

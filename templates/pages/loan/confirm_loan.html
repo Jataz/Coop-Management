@@ -1,0 +1,54 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block title %} Loan | Confirmation {% endblock title %}
+
+{% block extrastyle %}
+
+{% endblock extrastyle %}
+
+{% block bodyclass %} hold-transition sidebar-mini layout-fixed {% endblock bodyclass %}
+
+{% block content %}
+
+  <div class="pagetitle">
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Home</a></li>
+        <li class="breadcrumb-item active">Loan</li>
+        <li class="breadcrumb-item active">Confirmation</li>
+      </ol>
+    </nav>
+  </div><!-- End Page Title -->
+  <section class="section">
+    <div class="row">
+      <div class="col-lg-12">
+
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Loan Confirmation</h5>
+
+            <!-- Custom Styled Validation with Tooltips -->
+            <form class="row g-3 needs-validation" method="post" novalidate>
+                {% csrf_token %}
+                <p>Borrower: {{ borrower }}</p>
+                <p>Amount: ${{ amount }}</p>
+                <p>Service Fee: ${{ service_fee }}</p>
+                <p>Loan Term: {{ term_months }} month(s)</p>
+                <p>Amount to be Disbursed: ${{ disbursed_amount }}</p>
+                <p>Interest Amount: ${{ interest }}</p>
+                <p>Total Repayment Amount: ${{ repayment_amount }}</p>
+                <button type="submit">Confirm Application</button>
+            </form><!-- End Custom Styled Validation with Tooltips -->
+            
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+{% endblock content %}
+
+{% block extra_scripts %}
+
+{% endblock extra_scripts %}
