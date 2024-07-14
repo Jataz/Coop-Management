@@ -1244,3 +1244,42 @@ h6 {
   display: inline-block; /* Ensure the element is not stretched full-width */
   width: auto; /* Adjust width as needed */
 }
+
+
+.loan-status .icon {
+    font-size: 50px;
+    color: #28a745;
+}
+.loan-status .message {
+    margin-top: 10px;
+    color: #6c757d;
+}
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+}
+.detail-row a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.status-color {
+  color: black; /* Default color */
+}
+
+.status-color.outstanding {
+  color: red; /* Color for Outstanding */
+}
+
+.status-color.cleared {
+  color: green; /* Color for Cleared */
+}
+
+.status-color.pending {
+  color: orange; /* Color for Pending */
+}
+
+.status-color.approved {
+  color: blue; /* Color for Approved */
+}
+

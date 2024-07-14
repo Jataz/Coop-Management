@@ -21,12 +21,11 @@ def loan_apply(request):
     return render(request,'pages/loan/apply.html')
 
 @login_required
-
 def loan_application(request):
     user = request.user
     
     # Redirect to loan status if the user has an outstanding loan
-    outstanding_loan = LoanApplication.objects.filter(borrower=user, status='outstanding').first()
+    outstanding_loan = LoanApplication.objects.filter(borrower=user, status='Outstanding').first()
     if outstanding_loan:
         return redirect('loan-status', pk=outstanding_loan.pk)
     
@@ -97,7 +96,7 @@ def confirm_loan(request):
                 due_date=due_date,
                 agreed_to_terms=loan_data['agreed_to_terms'],
                 disbursed_amount=disbursed_amount ,
-                status='outstanding'
+                status='Outstanding'
             )
 
             # Create LoanStatus object
@@ -116,7 +115,7 @@ def confirm_loan(request):
             del request.session['loan_data']
 
             # Redirect to loan status page with loan_application.pk
-            return redirect('loan-status', pk=loan_application.pk)
+            return redirect('loan-transactions', pk=loan_application.pk)
         
         except Exception as e:
             messages.error(request, f'Failed to process loan application: {str(e)}')
@@ -155,7 +154,7 @@ def loan_payment(request):
             
             # If the outstanding amount is zero or less, mark the loan as cleared
             if loan_status.outstanding_amount <= 0:
-                loan_application.status = 'cleared'
+                loan_application.status = 'Cleared'
                 loan_status.outstanding_amount = 0  # Ensure it doesn't go negative
             
             loan_status.save()
@@ -193,7 +192,7 @@ def repay_loan(request, pk):
         
         # If the outstanding amount is zero or less, mark the loan as cleared
         if loan_status.outstanding_amount <= 0:
-            loan_application.status = 'cleared'
+            loan_application.status = 'Cleared'
             loan_status.outstanding_amount = 0  # Ensure it doesn't go negative
         
         loan_status.save()
@@ -210,6 +209,15 @@ def repay_loan(request, pk):
     return render(request, 'pages/loan/repayment.html', context)
 
 def loan_status(request, pk):
+    loan_application = LoanApplication.objects.get(pk=pk)
+    loan_status = loan_application.Loan_application_status
+    context ={
+        'loan':loan_application,
+        'loan_status':loan_status
+    }
+    return render(request, 'pages/loan/loan_status.html', context)
+
+def loan_outstanding(request, pk):
     loan_application = LoanApplication.objects.get(pk=pk)
     loan_status = loan_application.Loan_application_status
     return render(request, 'pages/loan/loan_status.html', {'loan_status': loan_status})

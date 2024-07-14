@@ -1,10 +1,13 @@
 from datetime import datetime, timedelta
 from decimal import Decimal
+import uuid
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth import get_user_model
 from django.conf import settings
 import secrets
+import random
+import string
 # Create your models here.
 
 class CustomUser(AbstractUser):
@@ -59,12 +62,12 @@ class LoanTerm(models.Model):
 
 class LoanApplication(models.Model):
     STATUS_CHOICES = [
-        ('pending', 'Pending'),
-        ('approved', 'Approved'),
-        ('outstanding', 'Outstanding'),
-        ('cleared', 'Cleared'),
+        ('Pending', 'Pending'),
+        ('Approved', 'Approved'),
+        ('Outstanding', 'Outstanding'),
+        ('Cleared', 'Cleared'),
     ]
-        
+    ref_no = models.CharField(max_length=30, unique=True, blank=True)
     borrower = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     mobile_account = models.CharField(max_length=15)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
@@ -77,7 +80,22 @@ class LoanApplication(models.Model):
     application_date = models.DateField(auto_now_add=True)
     application_time = models.TimeField(auto_now_add=True)
     agreed_to_terms = models.BooleanField(default=False)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Pending')
+    
+    def save(self, *args, **kwargs):
+        if not self.ref_no:
+            self.ref_no = self.generate_ref_no()
+        super().save(*args, **kwargs)
+
+    def generate_ref_no(self):
+        now = datetime.now()
+        date_part = now.strftime('%y%m%d.%H%M')
+        unique_letter = random.choice(string.ascii_uppercase)
+        unique_part = ''.join(random.choices(string.ascii_uppercase + string.digits, k=5))
+        return f"CI{date_part}.{unique_letter}{unique_part}"
+
+    def __str__(self):
+        return f"{self.full_name} - ${self.amount} for {self.loan_term.get_term_display()}"
 
 class LoanStatus(models.Model):
     loan_application = models.OneToOneField(LoanApplication, on_delete=models.CASCADE, related_name='Loan_application_status')

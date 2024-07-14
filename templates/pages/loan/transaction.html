@@ -41,6 +41,7 @@
               <thead>
                 <tr>
                   <th>No.</th>
+                  <th>Ref.No</th>
                   <th>Application Date</th>
                   <th>Amount</th>
                   <th>Duration (M)</th>
@@ -52,17 +53,32 @@
                 {% for loan in loans %}
                   <tr>
                     <td>{{ forloop.counter }}</td>
+                    <td>{{ loan.ref_no}}</td>
                     <td>{{ loan.application_date }}</td>
                     <td>{{ loan.amount }}</td>
                     <td>{{ loan.term_months }}</td>
-                    <td><span style="color: green;">{{ loan.status }}</span></td>
+                    <td>
+                      {% if loan.status == 'Outstanding' %}
+                          <span class="badge bg-warning p-6">{{ loan.status }}</span>
+                      {% elif loan.status == 'Cleared' %}
+                          <span class="badge bg-success p-6">{{ loan.status }}</span>
+                      {% elif loan.status == 'Pending' %}
+                          <span class="badge bg-primary p-6">{{ loan.status }}</span>
+                      {% elif loan.status == 'Approved' %}
+                          <span class="badge bg-info p-6">{{ loan.status }}</span>
+                      {% else %}
+                          <span class="badge bg-secondary p-6">{{ loan.status }}</span>
+                      {% endif %}
+                  </td>
+                  
+                  
                     <td>
                       <a href="{% url 'loan-status' pk=loan.pk %}">
                         <span class="badge border-primary border-1 text-primary">View Details</span>
                       </a>
-                      {% if loan.status == 'outstanding' %}
+                      {% if loan.status == 'Outstanding' %}
                       <a href="{% url 'loan-repay' pk=loan.pk %}">
-                        <span class="badge border-primary border-1 text-primary">Make Payment</span>
+                        <span class="badge border-success border-1 text-success">Make Payment</span>
                       </a>
                     {% endif %}
                     </td>
