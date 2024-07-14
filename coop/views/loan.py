@@ -137,7 +137,7 @@ def confirm_loan(request):
 def loan_payment(request):
     try:
         # Filter loan applications with 'outstanding' status
-        loan_application = LoanApplication.objects.filter(status='outstanding').first()
+        loan_application = LoanApplication.objects.filter(status='Outstanding').first()
         
         if not loan_application:
             messages.error(request, "No outstanding loan applications found.")
@@ -179,7 +179,7 @@ def repay_loan(request, pk):
     loan_application = get_object_or_404(LoanApplication, pk=pk)
     loan_status = get_object_or_404(LoanStatus, loan_application=loan_application)
 
-    if loan_application.status != 'outstanding':
+    if loan_application.status != 'Outstanding':
         messages.error(request, "Repayments can only be made to loans with an outstanding status.")
         return redirect('loan-status', pk=loan_application.pk)
 
@@ -199,7 +199,7 @@ def repay_loan(request, pk):
         loan_application.save()
 
         messages.success(request, "Loan repayment successful.")
-        return redirect('loan-status', pk=loan_application.pk)
+        return redirect('loan-transactions', pk=loan_application.pk)
 
     context = {
         'loan_application': loan_application,
@@ -209,16 +209,28 @@ def repay_loan(request, pk):
     return render(request, 'pages/loan/repayment.html', context)
 
 def loan_status(request, pk):
+    loan_application = get_object_or_404(LoanApplication, pk=pk)
+    loan_status = loan_application.Loan_application_status
+    loan_stats = loan_application.status
+
+    if loan_stats == 'Outstanding':
+        template_name = 'pages/loan/loan_outstanding.html'
+    else:
+        template_name = 'pages/loan/loan_status.html'
+
+    context = {
+        'loan': loan_application,
+        'loan_status': loan_status
+    }
+
+    return render(request, template_name, context)
+
+def loan_outstanding(request, pk):
     loan_application = LoanApplication.objects.get(pk=pk)
     loan_status = loan_application.Loan_application_status
     context ={
         'loan':loan_application,
         'loan_status':loan_status
     }
-    return render(request, 'pages/loan/loan_status.html', context)
-
-def loan_outstanding(request, pk):
-    loan_application = LoanApplication.objects.get(pk=pk)
-    loan_status = loan_application.Loan_application_status
-    return render(request, 'pages/loan/loan_status.html', {'loan_status': loan_status})
+    return render(request, 'pages/loan/loan_outstanding.html', context)
 

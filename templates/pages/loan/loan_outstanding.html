@@ -137,6 +137,94 @@
 
       </div>
     </div>
+
+    <div class="container mt-5">
+      <div class="card mb-3">
+          <div class="card-header">
+              Loan Status
+          </div>
+          <div class="card-body text-center">
+              <p class="text-muted">Did you know that paying your loan in time increases your credit limit? Try!</p>
+              <h4>Outstanding Amount</h4>
+              <p class="outstanding-amount">USD 52</p>
+              <p><a href="#" class="text-primary">Already paid? Submit your proof!</a></p>
+              <a href="{% url 'loan-payment' %}" class="btn btn-success my-2">Make Repayment</a>
+              <p><a href="#" class="text-primary">Other repayment methods</a></p>
+          </div>
+      </div>
+  
+      <div class="card mb-3">
+          <div class="card-body">
+              <h5>Repayment Details</h5>
+              <table class="table repayment-details">
+                  <tbody>
+                      <tr>
+                          <th scope="row">Due Date</th>
+                          <td>29/07/2024</td>
+                      </tr>
+                      <tr>
+                          <th scope="row">Due For Repayment</th>
+                          <td>$40</td>
+                      </tr>
+                      <tr>
+                          <th scope="row">Summary Interest</th>
+                          <td>+$12</td>
+                      </tr>
+                      <tr>
+                          <th scope="row">Overdue Mgt Fee</th>
+                          <td>$0</td>
+                      </tr>
+                      <tr>
+                          <th scope="row">Late Interest</th>
+                          <td>$0</td>
+                      </tr>
+                      <tr>
+                          <th scope="row">Partial Payment</th>
+                          <td>-$0</td>
+                      </tr>
+                      <tr>
+                          <th scope="row">Total To Be Repaid</th>
+                          <td class="text-danger">$52</td>
+                      </tr>
+                  </tbody>
+              </table>
+              <p><a href="#" class="text-primary">Loan Contract</a></p>
+          </div>
+      </div>
+  
+      <div class="card mb-3">
+          <div class="card-body">
+              <h5>Loan Details</h5>
+              <table class="table loan-details">
+                  <tbody>
+                      <tr>
+                          <th scope="row">Loan No</th>
+                          <td>2024062900OPNST</td>
+                      </tr>
+                      <tr>
+                          <th scope="row">Date</th>
+                          <td>29/06/2024</td>
+                      </tr>
+                      <tr>
+                          <th scope="row">Loan Amount</th>
+                          <td>$40</td>
+                      </tr>
+                      <tr>
+                          <th scope="row">Term</th>
+                          <td>30 Days</td>
+                      </tr>
+                      <tr>
+                          <th scope="row">Ref NO</th>
+                          <td><a href="#" class="text-primary">CJ240629.1132.G65197</a></td>
+                      </tr>
+                  </tbody>
+              </table>
+              <div class="text-center">
+                  <small class="text-muted">ZimLoan</small>
+              </div>
+          </div>
+      </div>
+  </div>
   </section>
 {% endblock content %}
 
