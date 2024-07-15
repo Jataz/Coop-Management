@@ -38,13 +38,28 @@ class LoginForm(AuthenticationForm):
     }
     
 
-class LoanApplicationForm(forms.ModelForm):
+""" class LoanApplicationForm(forms.ModelForm):
     class Meta:
         model = LoanApplication
         fields = ['mobile_account', 'amount', 'term_months', 'agreed_to_terms']
         widgets = {
             'term_months': forms.NumberInput(attrs={'min': 1}),
             'due_date': forms.DateInput(attrs={'type': 'date'}),
-        }
+        } """
 
+class LoanApplicationForm(forms.ModelForm):
+    class Meta:
+        model = LoanApplication
+        fields = ['mobile_account', 'amount', 'term_months', 'agreed_to_terms']
+
+    mobile_account = forms.CharField(label='Mobile Account', max_length=100,
+                                     widget=forms.TextInput(attrs={'class': 'form-control', 'required': True}))
     
+    amount = forms.DecimalField(label='Amount', min_value=0,
+                                widget=forms.NumberInput(attrs={'class': 'form-control', 'required': True}))
+
+    term_months = forms.IntegerField(label='Term (months)', min_value=1,
+                                     widget=forms.NumberInput(attrs={'class': 'form-control', 'required': True}))
+    
+    agreed_to_terms = forms.BooleanField(label='Agreed to Terms',
+                                         widget=forms.CheckboxInput(attrs={'class': 'form-check-input', 'required': True}))

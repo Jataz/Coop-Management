@@ -41,22 +41,6 @@ def signin(request):
         
     return render(request, "accounts/login.html")
 
-       
-def loginPage(request):
-    if request.method == 'POST':
-        form = LoginForm(data=request.POST)
-        if form.is_valid():
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password']
-            user = authenticate(request, username=username, password=password)
-            if user is not None:
-                login(request, user)
-                return redirect('/dashboard')
-    else:
-        form = LoginForm()
-
-    return render(request, 'accounts/login.html', {'form': form})
-
 def user_logout_view(request):
   logout(request)
   request.session.delete()

@@ -21,74 +21,61 @@
     </nav>
   </div><!-- End Page Title -->
   <section class="section">
-    <div class="row">
-      <div class="col-lg-12">
 
-        <div class="card">
+
+    <div class="row justify-content-center">
+
+      <div class="col-xl-8">
+
+        <div class="card mb-3">
           <div class="card-body">
             <h5 class="card-title">Loan Application</h5>
 
             <!-- Custom Styled Validation with Tooltips -->
             <form method="post" class="row g-3 needs-validation" novalidate>
-              <!-- <div class="col-md-4 position-relative">
-                <label for="validationTooltip01" class="form-label">First name</label>
-                <input type="text" class="form-control" id="validationTooltip01" value="John" required>
-                <div class="valid-tooltip">
-                  Lo
-                </div>
-              </div>
-              <div class="col-md-4 position-relative">
-                <label for="validationTooltip02" class="form-label">Last name</label>
-                <input type="text" class="form-control" id="validationTooltip02" value="Doe" required>
-                <div class="valid-tooltip">
-                  Looks good!
-                </div>
-              </div>
-              <div class="col-md-4 position-relative">
-                <label for="validationTooltipUsername" class="form-label">Username</label>
-                <div class="input-group has-validation">
-                  <span class="input-group-text" id="validationTooltipUsernamePrepend">@</span>
-                  <input type="text" class="form-control" id="validationTooltipUsername" aria-describedby="validationTooltipUsernamePrepend" required>
-                  <div class="invalid-tooltip">
-                    Please choose a unique and valid username.
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-6 position-relative">
-                <label for="validationTooltip03" class="form-label">City</label>
-                <input type="text" class="form-control" id="validationTooltip03" required>
-                <div class="invalid-tooltip">
-                  Please provide a valid city.
-                </div>
-              </div>
-              <div class="col-md-3 position-relative">
-                <label for="validationTooltip04" class="form-label">State</label>
-                <select class="form-select" id="validationTooltip04" required>
-                  <option selected disabled value="">Choose...</option>
-                  <option>...</option>
-                </select>
-                <div class="invalid-tooltip">
-                  Please select a valid state.
-                </div>
-              </div>
-              <div class="col-md-3 position-relative">
-                <label for="validationTooltip05" class="form-label">Zip</label>
-                <input type="text" class="form-control" id="validationTooltip05" required>
-                <div class="invalid-tooltip">
-                  Please provide a valid zip.
-                </div>
-              </div> -->
               {% csrf_token %}
-              {{ form.as_p }}
+              <div class="col-12 position-relative">
+                {{ form.mobile_account.label_tag }}
+                {{ form.mobile_account }}
+                <div class="invalid-tooltip">
+                    Please provide a valid mobile account.
+                </div>
+            </div>
+            <div class="col-12 position-relative">
+                {{ form.amount.label_tag }}
+                {{ form.amount }}
+                <div class="invalid-tooltip">
+                    Please provide a valid amount.
+                </div>
+            </div>
+            <div class="col-12 position-relative">
+                {{ form.term_months.label_tag }}
+                {{ form.term_months }}
+                <div class="invalid-tooltip">
+                    Please provide a valid term (months).
+                </div>
+            </div>
+            <div class="col-12 position-relative">
+                {{ form.agreed_to_terms.label }}
+                {{ form.agreed_to_terms }}
+                <div class="invalid-tooltip">
+                    You must agree to the terms.
+                </div>
+            </div>
+<!--               {% csrf_token %}
+              {{ form.as_p }} -->
               <div class="col-12">
+                <button class="btn  btn-outline-success" onclick="goBack()">Cancel</button>
                 <button class="btn  btn-outline-primary" type="submit">Next</button>
               </div>
             </form><!-- End Custom Styled Validation with Tooltips -->
-
           </div>
         </div>
-
-      </div>
+    
+        <!-- Back Button -->
+    
+    </div>
+    
     </div>
   </section>
 {% endblock content %}
