@@ -76,11 +76,11 @@
                       <a href="{% url 'loan-status' pk=loan.pk %}">
                         <span class="badge border-primary border-1 text-primary">View Details</span>
                       </a>
-                      {% if loan.status == 'Outstanding' %}
+<!--                       {% if loan.status == 'Outstanding' %}
                       <a href="{% url 'loan-repay' pk=loan.pk %}">
                         <span class="badge border-success border-1 text-success">Make Payment</span>
                       </a>
-                      {% endif %}
+                      {% endif %} -->
                     </td>
                   </tr>
                 {% endfor %}

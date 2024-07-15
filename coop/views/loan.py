@@ -115,7 +115,7 @@ def confirm_loan(request):
             del request.session['loan_data']
 
             # Redirect to loan status page with loan_application.pk
-            return redirect('loan-transactions', pk=loan_application.pk)
+            return redirect('loan-transactions')
         
         except Exception as e:
             messages.error(request, f'Failed to process loan application: {str(e)}')
