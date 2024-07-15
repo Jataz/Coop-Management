@@ -1263,23 +1263,4 @@ h6 {
     text-decoration: none;
 }
 
-.status-color {
-  color: black; /* Default color */
-}
-
-.status-color.outstanding {
-  color: red; /* Color for Outstanding */
-}
-
-.status-color.cleared {
-  color: green; /* Color for Cleared */
-}
-
-.status-color.pending {
-  color: orange; /* Color for Pending */
-}
-
-.status-color.approved {
-  color: blue; /* Color for Approved */
-}
 
