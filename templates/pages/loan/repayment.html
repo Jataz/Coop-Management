@@ -21,8 +21,8 @@
     </nav>
   </div><!-- End Page Title -->
   <section class="section">
-    <div class="row">
-      <div class="col-lg-12">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
 
         <div class="card">
           <div class="card-body">
@@ -31,11 +31,15 @@
             <!-- Custom Styled Validation with Tooltips -->
             <form method="post" class="row g-3 needs-validation" novalidate>
               {% csrf_token %}
-              <p>Outstanding Amount: ${{ outstanding_amount }}</p>
-              <label for="repayment_amount">Repayment Amount:</label>
-              <input type="number" step="0.01" name="repayment_amount" id="repayment_amount" required>
+              <p>Outstanding Amount: <span style="color: red;">${{ outstanding_amount }}</span> </p>
+              <div class="col-md-12">
+                <div class="form-floating">
+                  <input type="number" step="0.01" class="form-control" name="repayment_amount" id="repayment_amount" placeholder="Repayment Amount" required>
+                  <label for="floatingName">Repayment Amount</label>
+                </div>
+              </div>
               <div class="col-12">
-                <button class="btn  btn-outline-success" onclick="goBack()">Cancel</button>
+                <a class="btn  btn-outline-success"  href="{% url 'loan-transactions'%}">Cancel</a>
                 <button class="btn  btn-outline-primary" type="submit">Make Payment</button>
               </div>
             </form><!-- End Custom Styled Validation with Tooltips -->

@@ -95,26 +95,33 @@
           <div class="card-body">
               <h5 class="card-title">Repayment Details</h5>
               <ul class="list-group list-group-flush">
-                  <li class="list-group-item d-flex justify-content-between">
-                      <span>Due Date:</span>
+                    <li class="list-group-item d-flex justify-content-between">
+                      <span>Due Date</span>
                       <span>{{ loan_status.due_date }}</span>
-                  </li>
-                  <li class="list-group-item d-flex justify-content-between">
-                    <span>Summery Interest:</span>
-                    <span>${{ loan_status.summary_interest }}</span>
-                </li>
-                  <li class="list-group-item d-flex justify-content-between">
-                      <span>Overdue Fees:</span>
-                      <span>${{ loan_status.overdue_mgt_fee }}</span>
-                  </li>
-                  <li class="list-group-item d-flex justify-content-between">
-                      <span>Late Interest:</span>
-                      <span>${{ loan_status.late_interest }}</span>
-                  </li>
-                  <li class="list-group-item d-flex justify-content-between">
-                      <span>Partial Payment:</span>
-                      <span>${{ loan_status.partial_payment }}</span>
-                  </li>
+                     </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>Summery Interest</span>
+                        <span>${{ loan_status.summary_interest }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>Overdue Fees</span>
+                        <span style="color: brown;">${{ loan_status.overdue_mgt_fee }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>Late Interest</span>
+                        <span style="color: red;">${{ loan_status.late_interest }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>Partial Payment</span>
+                        <span style="color: brown;">${{ loan_status.partial_payment }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>Total To be Paid</span>
+                        <span style="color: red;">${{ loan_status.total_to_be_repaid }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                    </li>
+                  
               </ul>
           </div>
         </div>
@@ -122,23 +129,25 @@
         <!-- Loan Details Card -->
         <div class="card mb-4">
             <div class="card-body">
-                <h5 class="card-title">Repayment Details</h5>
+                <h5 class="card-title">Loan Details</h5>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item d-flex justify-content-between">
-                        <span>Reference Number:</span>
+                        <span>Reference Number</span>
                         <span style="color: blue;">{{ loan.ref_no }}</span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between">
-                        <span>Date:</span>
+                        <span>Date</span>
                         <span>{{ loan.application_date }}</span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between">
-                        <span>Loan Amount:</span>
-                        <span>${{ loan.amount }}</span>
+                        <span>Loan Amount</span>
+                        <span style="color: green;">${{ loan.amount }}</span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between">
-                        <span>Term:</span>
-                        <span>{{ loan.term_months }} Months</span>
+                        <span>Term</span>
+                        <span style="color: brown;">{{ loan.term_months }} Months</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
                     </li>
                 </ul>
             </div>

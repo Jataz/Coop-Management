@@ -21,30 +21,64 @@
     </nav>
   </div><!-- End Page Title -->
   <section class="section">
-    <div class="row">
-      <div class="col-lg-12">
 
-        <div class="card">
+    <div class="row justify-content-center">
+
+      <div class="col-xl-8">
+
+        <div class="card mb-3">
           <div class="card-body">
             <h5 class="card-title">Loan Confirmation</h5>
 
-            <!-- Custom Styled Validation with Tooltips -->
             <form class="row g-3 needs-validation" method="post" novalidate>
-                {% csrf_token %}
-                <p>Borrower: {{ borrower }}</p>
-                <p>Amount: ${{ amount }}</p>
-                <p>Service Fee: ${{ service_fee }}</p>
-                <p>Loan Term: {{ term_months }} month(s)</p>
-                <p>Amount to be Disbursed: ${{ disbursed_amount }}</p>
-                <p>Interest Amount: ${{ interest }}</p>
-                <p>Total Repayment Amount: ${{ repayment_amount }}</p>
-                <button class="btn btn-outline-success" type="submit">Confirm Application</button>
+              {% csrf_token %}
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item d-flex justify-content-between">
+                    <span>Borrower</span>
+                    <span style="color: blue;">{{ borrower }}</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between">
+                    <span>Loan Amount</span>
+                    <span style="color: green;">${{ amount }}</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between">
+                    <span>Service Fee</span>
+                    <span style="color: blueviolet;">${{ service_fee }}</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between">
+                    <span>Loan Term</span>
+                    <span style="color: red;">{{ term_months }} Months</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between">
+                  <span>Amount to be Disbursed</span>
+                  <span style="color: brown;">${{ disbursed_amount }}</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between">
+                  <span>Interest Amount</span>
+                  <span style="color: red;">${{ interest }}</span>
+                </li>
+
+                <li class="list-group-item d-flex justify-content-between">
+                  <span>Total Repayment Amount</span>
+                  <span style="color: green;">${{ repayment_amount }}</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between">
+                </li>
+            </ul>
+              
+              <div class="col-12">
+                <button class="btn  btn-outline-primary" onclick="goBack()">Cancel</button>
+                <button class="btn  btn-outline-success" type="submit">Confirm Application</button>
+              </div>
             </form><!-- End Custom Styled Validation with Tooltips -->
-            
+
           </div>
         </div>
-
-      </div>
+    
+        <!-- Back Button -->
+    
+    </div>
+    
     </div>
   </section>
 {% endblock content %}

@@ -14,10 +14,17 @@ urlpatterns = [
     path('loan-repay/<int:pk>/', views.repay_loan, name='loan-repay'),
 
     #Subscription Urls
-    path('subscriptions-payment', views.subscriptions_transactions, name='subscriptions-payment'),
+    path('subscriptions-payment', views.subscriptions_payment, name='subscriptions-payment'),
     path('subscriptions-transactions', views.subscriptions_transactions, name='subscriptions-transactions'),
 
-
+    #Share Capital
+    path('share-capital-payment', views.share_payment, name='share-capital-payment'),
+    path('share-capital-transactions', views.share_transactions, name='share-capital-transactions'),
+    
+    #Profile
+    path('user-profile', views.user_profile, name='user-profile'),
+    path('edit-profile',views.edit_profile, name='edit-profile'),
+    path('change-password', views.change_password, name='change-password'),
     
     #User Registration
     path("register/", views.signup, name="register"),

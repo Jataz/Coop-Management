@@ -55,7 +55,7 @@
                     <td>{{ forloop.counter }}</td>
                     <td>{{ loan.ref_no}}</td>
                     <td>{{ loan.application_date }}</td>
-                    <td>{{ loan.amount }}</td>
+                    <td style="color: green;">${{ loan.amount }}</td>
                     <td>{{ loan.term_months }}</td>
                     <td>
                       {% if loan.status == 'Outstanding' %}

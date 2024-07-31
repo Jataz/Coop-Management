@@ -1,7 +1,7 @@
 {% extends 'layouts/base.html' %}
 {% load static %}
 
-{% block title %} Subscription | Transactions {% endblock title %}
+{% block title %} Share Capital | Transactions {% endblock title %}
 
 {% block extrastyle %}
 
@@ -15,7 +15,7 @@
     <nav>
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Home</a></li>
-        <li class="breadcrumb-item active">Subscriptions</li>
+        <li class="breadcrumb-item active">Share Capital</li>
         <li class="breadcrumb-item active">Transactions</li>
       </ol>
     </nav>
@@ -27,9 +27,9 @@
         <div class="card">
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-center">
-              <h5 class="card-title">Subscription Transactions</h5>
+              <h5 class="card-title">Share Capital Transactions</h5>
               <div>
-                  <a  class="btn btn-outline-success btn-sm" href="{% url 'subscriptions-payment' %}" >
+                  <a  class="btn btn-outline-success btn-sm" href="{% url 'share-capital-payment' %}" >
                       <i class="ri-add-fill"></i> Make Payment
                   </a>
               </div>
@@ -38,22 +38,23 @@
             <table class="table datatable">
               <thead>
                 <tr>
-                  <th>No.</th>
+                  <th>
+                    <b>N</b>o.
+                  </th>
                   <th>Amount</th>
-                  <th>Start Date</th>
-                  <th>End Date</th>
+                  <th>Payment Date</th>
                   <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {% for sub in subscriptions %}
+                {% for capital in share_capital %}
                 <tr>
-                  <td>{{ forloop.counter}}</td>
-                  <td style="color: green;">${{ sub.amount}}</td>
-                  <td>{{ sub.start_date}}</td>
-                  <td>{{ sub.end_date }}</td>
+                  <td>{{ forloop.counter }}</td>
+                  <td style="color: green;">${{ capital.amount }}</td>
+                  <td>{{ capital.payment_date}}</td>
                   <td>View</td>
                 </tr>
+
                 {% endfor %}
               </tbody>
             </table>

@@ -42,7 +42,7 @@
                 <h4 class="card-title">{{ loan.status }}</h4>
                 <p class="message">
                     {% if loan.status == 'Cleared' %}
-                        Thank you for using our service. Wish you have a nice day!
+                      <span style="color: white;">Thank you for using our service. Wish you have a nice day!</span>  
                     {% elif loan.status == 'Outstanding' %}
                         Your loan is outstanding. Please take action soon.
                     {% elif loan.status == 'Approved' %}
@@ -62,20 +62,22 @@
                 <h5 class="card-title">Loan Details</h5>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item d-flex justify-content-between">
-                        <span>Reference Number:</span>
+                        <span>Reference Number</span>
                         <span style="color: blue;">{{ loan.ref_no }}</span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between">
-                        <span>Date:</span>
+                        <span>Date</span>
                         <span>{{ loan.application_date }}</span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between">
-                        <span>Loan Amount:</span>
-                        <span>${{ loan.amount }}</span>
+                        <span>Loan Amount</span>
+                        <span style="color: green;">${{ loan.amount }}</span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between">
-                        <span>Term:</span>
+                        <span>Term</span>
                         <span>{{ loan.term_months }} Months</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
                     </li>
                 </ul>
             </div>
@@ -87,20 +89,22 @@
                 <h5 class="card-title">Repayment Details</h5>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item d-flex justify-content-between">
-                        <span>Repayment Amount:</span>
-                        <span>${{ loan_status.total_to_be_repaid }}</span>
+                        <span>Repayment Amount</span>
+                        <span style="color: gold">${{ loan_status.total_to_be_repaid }}</span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between">
-                        <span>Overdue Fees:</span>
+                        <span>Overdue Fees</span>
                         <span>${{ loan_status.overdue_mgt_fee }}</span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between">
-                        <span>Total Repaid:</span>
-                        <span>${{ loan_status.total_to_be_repaid }}</span>
+                        <span>Total Repaid</span>
+                        <span style="color:  green;">${{ loan_status.total_to_be_repaid }}</span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between">
-                        <span>Cleared at:</span>
+                        <span>Cleared at</span>
                         <span>{{ loan_status.repayment_date }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
                     </li>
                 </ul>
             </div>

@@ -40,12 +40,45 @@ class Membership(models.Model):
     registration_fee_paid = models.BooleanField(default=False)
     is_member = models.BooleanField(default=False)
     start_date = models.DateField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
 class Subscription(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
     start_date = models.DateField(auto_now_add=True)
     end_date = models.DateField()
     active = models.BooleanField(default=True)
+    payment_date= models.DateField(auto_now_add=False,null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+class ShareCapital(models.Model):
+    user = user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    payment_date = models.DateField(auto_now_add=False,null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+class SubscriptionPartialPayment(models.Model):
+    subscription = models.ForeignKey(Subscription, on_delete=models.CASCADE)
+    partial_payment = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    partial_payment_date = models.DateField(auto_now_add=False, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Partial Payment for Subscription of ${self.amount} on {self.date}"
+
+class ShareCapitalPartialPayment(models.Model):
+    share_capital = models.ForeignKey(ShareCapital, on_delete=models.CASCADE)
+    partial_payment = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    partial_payment_date = models.DateField(auto_now_add=False, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Partial Payment for ShareCapital of ${self.amount} on {self.date}"
     
 class LoanTerm(models.Model):
     TERM_CHOICES = [
@@ -81,6 +114,8 @@ class LoanApplication(models.Model):
     application_time = models.TimeField(auto_now_add=True)
     agreed_to_terms = models.BooleanField(default=False)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Pending')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     
     def save(self, *args, **kwargs):
         if not self.ref_no:
@@ -107,6 +142,8 @@ class LoanStatus(models.Model):
     late_interest = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     partial_payment = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     repayment_date = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"Loan Status for Application ID {self.loan_application.id}"

@@ -21,8 +21,6 @@
     </nav>
   </div><!-- End Page Title -->
   <section class="section">
-
-
     <div class="row justify-content-center">
 
       <div class="col-xl-8">
@@ -65,7 +63,7 @@
 <!--               {% csrf_token %}
               {{ form.as_p }} -->
               <div class="col-12">
-                <button class="btn  btn-outline-success" onclick="goBack()">Cancel</button>
+                <a class="btn  btn-outline-success"  href="{% url 'loan-transactions'%}">Cancel</a>
                 <button class="btn  btn-outline-primary" type="submit">Next</button>
               </div>
             </form><!-- End Custom Styled Validation with Tooltips -->

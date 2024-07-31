@@ -1,7 +1,7 @@
 {% extends 'layouts/base.html' %}
 {% load static %}
 
-{% block title %} Subscription | Payment {% endblock title %}
+{% block title %} Share Capital | Payment {% endblock title %}
 
 {% block extrastyle %}
 
@@ -15,7 +15,7 @@
     <nav>
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Home</a></li>
-        <li class="breadcrumb-item active">Subscriptions</li>
+        <li class="breadcrumb-item active">Share Capital</li>
         <li class="breadcrumb-item active">Payment</li>
       </ol>
     </nav>
@@ -26,7 +26,7 @@
 
         <div class="card">
           <div class="card-body">
-            <h5 class="card-title">Subscription Payment</h5>
+            <h5 class="card-title">Share Capital Payment</h5>
 
             <!-- Custom Styled Validation with Tooltips -->
             <form method="post" class="row g-3 needs-validation" novalidate>
@@ -39,7 +39,8 @@
               </div>
               
               <div class="col-12">
-                <a class="btn  btn-outline-success"  href="{% url 'subscriptions-transactions'%}">Cancel</a>
+                <!-- <button class="btn  btn-outline-success" onclick="goBack()">Cancel</button> -->
+                <a class="btn  btn-outline-success"  href="{% url 'share-capital-transactions'%}">Cancel</a>
                 <button class="btn  btn-outline-primary" type="submit">Make Payment</button>
               </div>
             </form><!-- End Custom Styled Validation with Tooltips -->

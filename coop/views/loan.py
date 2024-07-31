@@ -134,6 +134,7 @@ def confirm_loan(request):
     return render(request, 'pages/loan/confirm_loan.html', context)
 
 
+@login_required
 def loan_payment(request):
     try:
         # Filter loan applications with 'outstanding' status
