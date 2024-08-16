@@ -4,28 +4,28 @@
   <ul class="sidebar-nav" id="sidebar-nav">
 
     <li class="nav-item">
-        <a class="nav-link {% if active_page == 'dashboard' %}active{% endif %}" href="{% url 'dashboard' %}">
+        <a class="nav-link collapsed {% if active_page == 'dashboard' %}active{% endif %}" href="{% url 'dashboard' %}">
             <i class="bi bi-grid"></i>
             <span>Dashboard</span>
         </a>
     </li><!-- End Dashboard Nav -->
 
     <li class="nav-item">
-      <a class="nav-link {% if active_page == 'loan-transactions' %}active{% endif %}" href="{% url 'loan-transactions' %}">
+      <a class="nav-link collapsed {% if active_page == 'loan-transactions' %}active{% endif %}" href="{% url 'loan-transactions' %}">
           <i class="bi bi-credit-card"></i>
           <span>Loan</span>
       </a>
     </li><!-- End Loan Nav -->
 
     <li class="nav-item">
-      <a class="nav-link {% if active_page == 'subscriptions-transactions' %}active{% endif %}" href="{% url 'subscriptions-transactions' %}">
+      <a class="nav-link collapsed {% if active_page == 'subscriptions-transactions' %}active{% endif %}" href="{% url 'subscriptions-transactions' %}">
           <i class="bi bi-currency-exchange"></i>
           <span>Subscriptions</span>
       </a>
     </li><!-- End Subcriptions Nav -->
 
     <li class="nav-item">
-      <a class="nav-link {% if active_page == 'share-capital-transactions' %}active{% endif %}" href="{% url 'share-capital-transactions' %}">
+      <a class="nav-link collapsed {% if active_page == 'share-capital-transactions' %}active{% endif %}" href="{% url 'share-capital-transactions' %}">
           <i class="bi bi-cash-coin"></i>
           <span>Share Capital</span>
       </a>
