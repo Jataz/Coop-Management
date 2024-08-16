@@ -4,89 +4,51 @@
   <ul class="sidebar-nav" id="sidebar-nav">
 
     <li class="nav-item">
-      <a class="nav-link " href="{% url 'dashboard' %}">
-        <i class="bi bi-grid"></i>
-        <span>Dashboard</span>
-      </a>
+        <a class="nav-link {% if active_page == 'dashboard' %}active{% endif %}" href="{% url 'dashboard' %}">
+            <i class="bi bi-grid"></i>
+            <span>Dashboard</span>
+        </a>
     </li><!-- End Dashboard Nav -->
 
     <li class="nav-item">
-      <a class="nav-link collapsed" data-bs-target="#loan-nav" data-bs-toggle="collapse" href="#">
-        <i class="bi bi-cash-coin"></i><span>Loan</span><i class="bi bi-chevron-down ms-auto"></i>
+      <a class="nav-link {% if active_page == 'loan-transactions' %}active{% endif %}" href="{% url 'loan-transactions' %}">
+          <i class="bi bi-credit-card"></i>
+          <span>Loan</span>
       </a>
-      <ul id="loan-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-              <a href="{% url 'loan-application' %}">
-                  <i class="bi bi-circle"></i><span>Application</span>
-              </a>
-          </li>
-              <!-- <li>
-              <a href="{% url 'loan-payment' %}">
-                  <i class="bi bi-circle"></i><span>Repayment</span>
-              </a>
-          </li> -->
-          <li>
-              <a href="{% url 'loan-transactions' %}">
-                  <i class="bi bi-circle"></i><span>Transactions</span>
-              </a>
-          </li>
-      </ul>
-    </li><!-- End Tables Nav -->
+    </li><!-- End Loan Nav -->
 
     <li class="nav-item">
-      <a class="nav-link collapsed" data-bs-target="#sub-nav" data-bs-toggle="collapse" href="#">
-        <i class="bi bi-credit-card"></i><span>Subscriptions</span><i class="bi bi-chevron-down ms-auto"></i>
+      <a class="nav-link {% if active_page == 'subscriptions-transactions' %}active{% endif %}" href="{% url 'subscriptions-transactions' %}">
+          <i class="bi bi-currency-exchange"></i>
+          <span>Subscriptions</span>
       </a>
-      <ul id="sub-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-              <a href="{% url 'subscriptions-payment' %}">
-                  <i class="bi bi-circle"></i><span> Make Payment</span>
-              </a>
-          </li>
-          <li>
-              <a href="{% url 'subscriptions-transactions' %}">
-                  <i class="bi bi-circle"></i><span>Transactions</span>
-              </a>
-          </li>
-      </ul>
-    </li><!-- End Tables Nav -->
+    </li><!-- End Subcriptions Nav -->
 
     <li class="nav-item">
-      <a class="nav-link collapsed" data-bs-target="#share-nav" data-bs-toggle="collapse" href="#">
-        <i class="bi bi-currency-exchange"></i><span>Share Capital</span><i class="bi bi-chevron-down ms-auto"></i>
+      <a class="nav-link {% if active_page == 'share-capital-transactions' %}active{% endif %}" href="{% url 'share-capital-transactions' %}">
+          <i class="bi bi-cash-coin"></i>
+          <span>Share Capital</span>
       </a>
-      <ul id="share-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-              <a href="{% url 'share-capital-payment' %}">
-                  <i class="bi bi-circle"></i><span>Make Payment</span>
-              </a>
-          </li>
-          <li>
-              <a href="{% url 'share-capital-transactions' %}">
-                  <i class="bi bi-circle"></i><span>Transactions</span>
-              </a>
-          </li>
-      </ul>
-    </li><!-- End Tables Nav -->
+    </li><!-- End Share Capital Nav -->
 
     <li class="nav-item">
-      <a class="nav-link collapsed" data-bs-target="#icons-nav" data-bs-toggle="collapse" href="#">
-        <i class="bi bi-gear"></i><span>Settings</span><i class="bi bi-chevron-down ms-auto"></i>
-      </a>
-      <ul id="icons-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-        <li>
-          <a href="{% url  'user-profile' %}">
-            <i class="bi bi-circle"></i><span>User Profile</span>
-          </a>
-        </li>
-        <li>
-          <a href="{% url 'change-password' %}">
-            <i class="bi bi-circle"></i><span>Change Password</span>
-          </a>
-        </li>
-      </ul>
-    </li><!-- End Icons Nav -->
+        <a class="nav-link collapsed {% if active_page == 'user-profile' or active_page == 'change-password' %}active{% endif %}" data-bs-target="#icons-nav" data-bs-toggle="collapse" href="#">
+            <i class="bi bi-gear"></i><span>Settings</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="icons-nav" class="nav-content collapse {% if active_page == 'user-profile' or active_page == 'change-password' %}show{% endif %}" data-bs-parent="#sidebar-nav">
+            <li>
+                <a class="{% if active_page == 'user-profile' %}active{% endif %}" href="{% url 'user-profile' %}">
+                    <i class="bi bi-circle"></i><span>User Profile</span>
+                </a>
+            </li>
+            <li>
+                <a class="{% if active_page == 'change-password' %}active{% endif %}" href="{% url 'change-password' %}">
+                    <i class="bi bi-circle"></i><span>Change Password</span>
+                </a>
+            </li>
+        </ul>
+    </li><!-- End Settings Nav -->
 
-  </ul>
+</ul>
 
 </aside>

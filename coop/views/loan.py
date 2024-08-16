@@ -13,12 +13,19 @@ from ..forms import LoanApplicationForm
 def loan_transactions(request):
     # Filter loans that belong to the current logged-in user
     loans = LoanApplication.objects.filter(borrower=request.user)
-    return render(request, 'pages/loan/transaction.html', {'loans': loans})
+    context = {
+        'loans': loans,
+        'active_page': 'loan-transactions'
+    }
+    return render(request, 'pages/loan/transaction.html', context)
 
 
 @login_required(login_url="/login")
 def loan_apply(request):
-    return render(request,'pages/loan/apply.html')
+    context = {
+        'active_page': 'loan-application'
+    }
+    return render(request, 'pages/loan/apply.html', context)
 
 @login_required
 def loan_application(request):
@@ -56,7 +63,12 @@ def loan_application(request):
         form = LoanApplicationForm()
 
     # Render loan application form
-    return render(request, 'pages/loan/application.html', {'form': form})
+
+    context = {
+        'form': form,
+        'active_page': 'loan-application'
+    }
+    return render(request, 'pages/loan/application.html', context)
 
 @login_required
 def confirm_loan(request):

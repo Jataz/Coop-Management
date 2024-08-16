@@ -10,8 +10,15 @@ from ..forms import LoanApplicationForm
 
 @login_required(login_url="/login")
 def share_transactions(request):
+    context = {
+        'active_page': 'share-capital-transactions'
+    }
     return render(request,'pages/shareCapital/transaction.html')
+
 
 @login_required(login_url="/login")
 def share_payment(request):
-    return render(request,'pages/shareCapital/payment.html')
+    context = {
+        'active_page': 'share-capital-payment'
+    }
+    return render(request,'pages/shareCapital/payment.html', context)

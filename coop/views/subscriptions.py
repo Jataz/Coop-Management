@@ -10,8 +10,14 @@ from ..forms import LoanApplicationForm
 
 @login_required(login_url="/login")
 def subscriptions_transactions(request):
-    return render(request,'pages/subscriptions/transaction.html')
+    context = {
+        'active_page': 'subscriptions-transactions'
+    }
+    return render(request,'pages/subscriptions/transaction.html',context)
 
 @login_required(login_url="/login")
 def subscriptions_payment(request):
-    return render(request,'pages/subscriptions/payment.html')
+    context = {
+        'active_page': 'subscriptions-payment'
+    }
+    return render(request,'pages/subscriptions/payment.html',context)
