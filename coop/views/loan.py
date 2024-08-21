@@ -106,7 +106,6 @@ def confirm_loan(request):
                 service_fee=service_fee,
                 repayment_amount=repayment_amount,
                 due_date=due_date,
-                agreed_to_terms=loan_data['agreed_to_terms'],
                 disbursed_amount=disbursed_amount ,
                 status='Outstanding'
             )
