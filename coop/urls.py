@@ -10,7 +10,7 @@ urlpatterns = [
     path('loan-apply/', views.loan_apply, name='loan-apply'),
     path('loan-payment/', views.loan_payment, name='loan-payment'),
     path('loan-confirm/', views.confirm_loan, name='loan-confirm'),
-    path('loan-status/<int:pk>/', views.loan_status, name='loan-status'),
+    path('loan-details/<int:pk>/', views.loan_details, name='loan-details'),
     path('loan-repay/<int:pk>/', views.repay_loan, name='loan-repay'),
 
     #Subscription Urls

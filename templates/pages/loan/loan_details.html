@@ -1,7 +1,7 @@
 {% extends 'layouts/base.html' %}
 {% load static %}
 
-{% block title %} Loan | Status {% endblock title %}
+{% block title %} Loan | Details {% endblock title %}
 
 {% block extrastyle %}
 
@@ -16,7 +16,7 @@
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Home</a></li>
         <li class="breadcrumb-item active">Loan</li>
-        <li class="breadcrumb-item active">Status</li>
+        <li class="breadcrumb-item active">Details</li>
       </ol>
     </nav>
   </div><!-- End Page Title -->
@@ -111,7 +111,8 @@
         </div>
     
         <!-- Back Button -->
-        <button class="btn  btn-outline-success mb-4" onclick="goBack()">Back</button>
+<!--         <button class="btn  btn-outline-success mb-4" onclick="goBack()">Back</button> -->
+        <a href="{% url 'loan-transactions' %}" class="btn btn-outline-success mb-4">Back</a>
     
     </div>
     

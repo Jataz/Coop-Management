@@ -34,7 +34,7 @@ def loan_application(request):
     # Redirect to loan status if the user has an outstanding loan
     outstanding_loan = LoanApplication.objects.filter(borrower=user, status='Outstanding').first()
     if outstanding_loan:
-        return redirect('loan-status', pk=outstanding_loan.pk)
+        return redirect('loan-details', pk=outstanding_loan.pk)
     
     if request.method == 'POST':
         form = LoanApplicationForm(request.POST)
@@ -174,7 +174,7 @@ def loan_payment(request):
             loan_application.save()
 
             messages.success(request, "Loan repayment successful.")
-            return redirect('loan-status', pk=loan_application.pk)
+            return redirect('loan-details', pk=loan_application.pk)
 
         context = {
             'loan_application': loan_application,
@@ -221,7 +221,7 @@ def repay_loan(request, pk):
     }
     return render(request, 'pages/loan/repayment.html', context)
 
-def loan_status(request, pk):
+def loan_details(request, pk):
     loan_application = get_object_or_404(LoanApplication, pk=pk)
     loan_status = loan_application.Loan_application_status
     loan_stats = loan_application.status
@@ -229,7 +229,7 @@ def loan_status(request, pk):
     if loan_stats == 'Outstanding':
         template_name = 'pages/loan/loan_outstanding.html'
     else:
-        template_name = 'pages/loan/loan_status.html'
+        template_name = 'pages/loan/loan_details.html'
 
     context = {
         'loan': loan_application,
