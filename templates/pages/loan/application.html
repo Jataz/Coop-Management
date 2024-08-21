@@ -22,50 +22,43 @@
   </div><!-- End Page Title -->
   <section class="section">
     <div class="row justify-content-center">
+      <div class="col-lg-6">
 
-      <div class="col-xl-6">
-
-        <div class="card mb-3">
+        <div class="card">
           <div class="card-body">
             <h5 class="card-title">Loan Application</h5>
 
             <!-- Custom Styled Validation with Tooltips -->
             <form method="post" class="row g-3 needs-validation" novalidate>
               {% csrf_token %}
-              <div class="col-12 position-relative">
-                {{ form.mobile_account.label_tag }}
-                {{ form.mobile_account }}
-                <div class="invalid-tooltip">
-                    Please provide a valid mobile account.
+              <div class="col-md-12">
+                <div class="form-floating">
+                  <input type="mobile" class="form-control" name="mobile_account" id="mobile_account"  required>
+                  <label for="floatingInput">Mobile Number</label>
                 </div>
               </div>
-              <div class="col-12 position-relative">
-                  {{ form.amount.label_tag }}
-                  {{ form.amount }}
-                  <div class="invalid-tooltip">
-                      Please provide a valid amount.
-                  </div>
+              <div class="col-md-12">
+                <div class="form-floating">
+                  <input type="number" step="0.01" class="form-control" name="amount" id="amount"  required>
+                  <label for="floatingInput">Amount</label>
+                </div>
               </div>
-              <div class="col-12 position-relative">
-                  {{ form.term_months.label_tag }}
-                  {{ form.term_months }}
-                  <div class="invalid-tooltip">
-                      Please provide a valid term (months).
-                  </div>
+              <div class="col-md-12">
+                <div class="form-floating">
+                  <input type="number" class="form-control" name="term_months" id="term_months" min="1" required>
+                  <label for="floatingInput">Term (months)</label>
+                </div>
               </div>
-
               <div class="col-12">
                 <a class="btn  btn-outline-success"  href="{% url 'loan-transactions'%}">Cancel</a>
                 <button class="btn  btn-outline-primary" type="submit">Next</button>
               </div>
             </form><!-- End Custom Styled Validation with Tooltips -->
+
           </div>
         </div>
-    
-        <!-- Back Button -->
-    
-    </div>
-    
+
+      </div>
     </div>
   </section>
 {% endblock content %}
