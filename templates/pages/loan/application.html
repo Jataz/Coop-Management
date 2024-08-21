@@ -44,10 +44,15 @@
                 </div>
               </div>
               <div class="col-md-12">
-                <div class="form-floating">
-                  <input type="number" class="form-control" name="term_months" id="term_months" min="1" required>
-                  <label for="floatingInput">Term (months)</label>
-                </div>
+                <div class="form-floating mb-3">
+                  <select class="form-select" name="term_months" id="term_months" required>
+                    <option value="" disabled selected>Select term</option>
+                    <option value="3">3 Months</option>
+                    <option value="6">6 Months</option>
+                    <option value="12">12 Months</option>
+                  </select>
+                  <label for="floatingSelect">Term</label>
+                </div>                
               </div>
               <div class="col-12">
                 <a class="btn  btn-outline-success"  href="{% url 'loan-transactions'%}">Cancel</a>

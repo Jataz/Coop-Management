@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from decimal import Decimal
+from decimal import ROUND_HALF_UP, Decimal
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -50,7 +50,7 @@ def loan_application(request):
             
             # Prepare loan data for session
             loan_data['borrower'] = borrower.id  # Store borrower id for reference
-            loan_data['amount'] = float(loan_data['amount'])  # Convert amount to float
+            loan_data['amount'] = round(float(loan_data['amount']), 2)# Convert amount to float
 
             # Store the data in session for confirmation
             request.session['loan_data'] = loan_data
@@ -83,16 +83,22 @@ def confirm_loan(request):
     borrower = CustomUser.objects.get(id=borrower_identifier)  # Adjust this based on your User model
     
     # Convert float values to Decimal
-    amount = Decimal(str(loan_data['amount']))
+    amount = Decimal(str(loan_data['amount'])).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
     term_months = loan_data['term_months']
-    interest_rate = Decimal('5.00')  # Assuming a fixed interest rate
-    service_fee = Decimal('10.00')
+    interest_rate = Decimal('5')  # Fixed interest rate
+    #service_fee = Decimal('0.')   # Fixed service fee
 
     # Calculate values for confirmation page
+    service_fee = amount * Decimal('0.04') #3 percent
     interest = (amount * (interest_rate / Decimal('100')) * term_months)
     repayment_amount = amount + interest
     disbursed_amount = amount - service_fee
     due_date = datetime.now() + timedelta(days=30 * term_months)
+    
+    # Round to 2 decimal places
+    service_fee = service_fee.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
+    interest = interest.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
+    repayment_amount = repayment_amount.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
 
     if request.method == 'POST':
         try:

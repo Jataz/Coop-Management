@@ -56,7 +56,7 @@
                     <td>{{ loan.ref_no}}</td>
                     <td>{{ loan.application_date }}</td>
                     <td style="color: green;">${{ loan.amount }}</td>
-                    <td>{{ loan.term_months }}</td>
+                    <td>{{ loan.term_months }} months</td>
                     <td>
                       {% if loan.status == 'Outstanding' %}
                           <span class="badge bg-warning p-6">{{ loan.status }}</span>

@@ -105,8 +105,8 @@ class LoanApplication(models.Model):
     mobile_account = models.CharField(max_length=15)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     term_months = models.PositiveIntegerField()  # Duration of the loan in months
-    interest_rate = models.DecimalField(max_digits=5, decimal_places=2, default=Decimal('5.00'))  # Interest rate as a percentage
-    service_fee = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('2.00'))  # Service fee as a fixed amount
+    interest_rate = models.DecimalField(max_digits=5, decimal_places=2)  # Interest rate as a percentage
+    service_fee = models.DecimalField(max_digits=10, decimal_places=2)  # Service fee as a fixed amount
     due_date = models.DateField(blank=True, null=True)
     repayment_amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     disbursed_amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
