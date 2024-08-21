@@ -12,7 +12,7 @@ from ..forms import LoanApplicationForm
 @login_required(login_url="/login")
 def loan_transactions(request):
     # Filter loans that belong to the current logged-in user
-    loans = LoanApplication.objects.filter(borrower=request.user)
+    loans = LoanApplication.objects.filter(borrower=request.user).order_by('-application_date')
     context = {
         'loans': loans,
         'active_page': 'loan-transactions'
