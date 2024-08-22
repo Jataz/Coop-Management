@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import CustomUser, LoanApplication, OtpToken
+from .models import CustomUser, LoanApplication
 from django.contrib.auth.admin import UserAdmin
 # Register your models here.
 
@@ -23,10 +23,7 @@ class CustomUserAdmin(UserAdmin):
     ordering = ('email',)
 
 
-class OtpTokenAdmin(admin.ModelAdmin):
-    list_display = ("user", "otp_code")
 
 
-admin.site.register(OtpToken, OtpTokenAdmin)
 admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.register(LoanApplication)

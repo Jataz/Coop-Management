@@ -48,10 +48,23 @@ class LoginForm(AuthenticationForm):
             'due_date': forms.DateInput(attrs={'type': 'date'}),
         } """
 
+
 class BeneficiaryForm(forms.ModelForm):
     class Meta:
         model = Beneficiary
         fields = ['id_number', 'sex', 'full_name']
+        widgets = {
+            'id_number': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'ID Number'}),
+            'sex': forms.Select(attrs={'class': 'form-control'}, choices=[('M', 'Male'), ('F', 'Female')]),  # Example
+            'full_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Full Name'}),
+        }
+
+    # Additional validation if needed
+    def clean_id_number(self):
+        id_number = self.cleaned_data.get('id_number')
+        if Beneficiary.objects.filter(id_number=id_number).exists():
+            raise forms.ValidationError("A beneficiary with this ID number already exists.")
+        return id_number
 
 class LoanApplicationForm(forms.ModelForm):
     class Meta:

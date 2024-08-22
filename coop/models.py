@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 from decimal import Decimal
 import re
 import uuid
-from django.db import models
+from django.db import models,transaction
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth import get_user_model
 from django.conf import settings
@@ -14,82 +14,77 @@ from django.db.models import Max
 
 class CustomUser(AbstractUser):
     email = models.EmailField(unique=True)
-    membership_no = models.CharField(max_length=30, unique=True, blank=True , editable=False)
-    phone_number = models.CharField(blank=True,max_length=15)
-    full_name = models.CharField(blank=True,max_length=255 )
-    date_of_birth = models.DateField(null=True,blank=True)
-    id_number = models.CharField(blank=True,max_length=20, unique=True )
-    sex = models.CharField(blank=True,max_length=1, choices=[('M', 'Male'), ('F', 'Female')] )
+    membership_no = models.CharField(max_length=30, unique=True, blank=True, editable=False)
+    phone_number = models.CharField(blank=True, max_length=15)
+    full_name = models.CharField(blank=True, max_length=255)
+    date_of_birth = models.DateField(null=True, blank=True)
+    id_number = models.CharField(blank=True, max_length=20, unique=True)
+    sex = models.CharField(blank=True, max_length=1, choices=[('M', 'Male'), ('F', 'Female')])
     physical_address = models.TextField(blank=True)
     registration_fee_paid = models.BooleanField(default=False)
     is_member = models.BooleanField(default=False)
-    
+
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["username"]
-    
+
     def __str__(self):
         return self.email
-    
-    def save(self, *args, **kwargs):
-        if not self.membership_no:
-            # Get the highest current membership number
-            last_member = CustomUser.objects.all().aggregate(Max('membership_no'))
-            last_number = last_member['membership_no__max']
 
-            if last_number:
-                # Extract the last number and increment it
-                match = re.match(r'CM(\d+)', last_number)
-                if match:
-                    next_number = int(match.group(1)) + 1
+    def save(self, *args, **kwargs):
+        # Only generate a membership number if it does not exist
+        if not self.membership_no:
+            with transaction.atomic():
+                # Lock the table to prevent race conditions
+                last_member = CustomUser.objects.select_for_update().aggregate(Max('membership_no'))
+                last_number = last_member['membership_no__max']
+
+                if last_number:
+                    # Extract the last number and increment it
+                    match = re.match(r'CM(\d+)', last_number)
+                    if match:
+                        next_number = int(match.group(1)) + 1
+                    else:
+                        next_number = 1
                 else:
                     next_number = 1
-            else:
-                next_number = 1
 
-            # Generate the new membership number
-            self.membership_no = f"CM{next_number}"
+                # Generate the new membership number
+                self.membership_no = f"CM{next_number}"
 
         super().save(*args, **kwargs)
 
 class Beneficiary(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    beneficiary_no = models.CharField(max_length=30, unique=True, blank=True ,editable=False)
-    id_number = models.CharField(blank=True,max_length=20, unique=True )
-    sex = models.CharField(blank=True,max_length=1, choices=[('M', 'Male'), ('F', 'Female')] )
-    full_name = models.CharField(blank=True,max_length=255 )
+    beneficiary_no = models.CharField(max_length=30, unique=True, blank=True, editable=False)
+    id_number = models.CharField(blank=True, max_length=20, unique=True)
+    sex = models.CharField(blank=True, max_length=1, choices=[('M', 'Male'), ('F', 'Female')])
+    full_name = models.CharField(blank=True, max_length=255)
     
     def __str__(self):
         return self.full_name
 
     def save(self, *args, **kwargs):
         if not self.beneficiary_no:
-            # Get the highest current beneficiary number
-            last_beneficiary = Beneficiary.objects.all().aggregate(Max('beneficiary_no'))
-            last_number = last_beneficiary['beneficiary_no__max']
+            with transaction.atomic():
+                # Lock the table to prevent race conditions
+                last_beneficiary = Beneficiary.objects.select_for_update().aggregate(Max('beneficiary_no'))
+                last_number = last_beneficiary['beneficiary_no__max']
 
-            if last_number:
-                # Extract the last number and increment it
-                match = re.match(r'BN(\d+)', last_number)
-                if match:
-                    next_number = int(match.group(1)) + 1
+                if last_number:
+                    # Extract the last number and increment it
+                    match = re.match(r'BN(\d+)', last_number)
+                    if match:
+                        next_number = int(match.group(1)) + 1
+                    else:
+                        next_number = 1
                 else:
                     next_number = 1
-            else:
-                next_number = 1
 
-            # Generate the new beneficiary number
-            self.beneficiary_no = f"BN{next_number}"
+                # Generate the new beneficiary number
+                self.beneficiary_no = f"BN{next_number}"
 
         super().save(*args, **kwargs)
-class OtpToken(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="otps")
-    otp_code = models.CharField(max_length=6, default=secrets.token_hex(3))
-    tp_created_at = models.DateTimeField(auto_now_add=True)
-    otp_expires_at = models.DateTimeField(blank=True, null=True)
-    
-    
-    def __str__(self):
-        return self.user.username
+        
 class Membership(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     registration_fee_paid = models.BooleanField(default=False)
