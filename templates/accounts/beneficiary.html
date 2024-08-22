@@ -1,0 +1,141 @@
+{% extends 'layouts/auth_base.html' %}
+
+{% block title %} Beneficiary Form {% endblock title %}
+
+{% block bodyclass %} Beneficiary-Form-Page {% endblock bodyclass %}
+
+{% block content %}
+
+<style>
+    .beneficiary-counter {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        line-height: 20px;
+        text-align: center;
+        border-radius: 50%;
+        background-color: #007bff; /* Blue color */
+        color: white;
+        font-weight: bold;
+        font-size: 10px;
+    }
+</style>
+
+<div class="container">
+    <section class="section beneficiary-form min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 col-md-10 d-flex flex-column align-items-center justify-content-center">
+                    
+                    <div class="d-flex justify-content-center py-4">
+                        <a href="index.html" class="logo d-flex align-items-center w-auto">
+                            <img src="assets/img/logo.png" alt="Logo">
+                            <span class="d-none d-lg-block">Women Development</span>
+                        </a>
+                    </div><!-- End Logo -->
+
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="pt-4 pb-2">
+                                <h5 class="card-title text-center pb-0 fs-4">Add Beneficiary</h5>
+                                <p class="text-center small">Provide details for the beneficiary.</p>
+                            </div>
+
+                            <form method="post" class="row g-3 needs-validation" novalidate>
+                                {% csrf_token %}
+
+                                <div id="beneficiaries-forms">
+                                    <!-- Initial Beneficiary Form -->
+                                    <div class="beneficiary-form" id="beneficiary-form-template">
+                                        <hr>
+                                        <div>
+                                           <h6 class="beneficiary-counter float-end">1</h6>     
+                                        </div>
+                                    
+                                        <div class="row g-3">
+                                                                                    <!-- ID Number -->
+                                            <div class="col-3">
+                                                <label for="id_number" class="form-label">ID Number</label>
+                                                <input type="text" id="id_number" name="beneficiaries-{{ forloop.counter }}-id_number" class="form-control" value="{{ form.id_number.value|default_if_none:'' }}" required>
+                                                {% if form.id_number.errors %}
+                                                    {% for error in form.id_number.errors %}
+                                                        <div class="invalid-feedback">{{ error }}</div>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </div>
+
+
+                                            <!-- Full Name -->
+                                            <div class="col-6">
+                                                <label for="full_name" class="form-label">Full Name</label>
+                                                <input type="text" id="full_name" name="beneficiaries-{{ forloop.counter }}-full_name" class="form-control" value="{{ form.full_name.value|default_if_none:'' }}" required>
+                                                {% if form.full_name.errors %}
+                                                    {% for error in form.full_name.errors %}
+                                                        <div class="invalid-feedback">{{ error }}</div>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </div>
+                                            
+                                            <!-- Sex -->
+                                            <div class="col-3">
+                                                <label for="sex" class="form-label">Sex</label>
+                                                <select id="sex" name="beneficiaries-{{ forloop.counter }}-sex" class="form-control" required>
+                                                    <option value="">Select</option>
+                                                    <option value="M" {% if form.sex.value == 'M' %}selected{% endif %}>Male</option>
+                                                    <option value="F" {% if form.sex.value == 'F' %}selected{% endif %}>Female</option>
+                                                </select>
+                                                {% if form.sex.errors %}
+                                                    {% for error in form.sex.errors %}
+                                                        <div class="invalid-feedback">{{ error }}</div>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <!-- Add Beneficiary Button -->
+                                <div class="col-12">
+                                    <button type="button" class="btn btn-secondary w-100" id="add-beneficiary-button">Add Another Beneficiary</button>
+                                </div>
+
+                                <!-- Submit Button -->
+                                <div class="col-12">
+                                    <button class="btn btn-primary w-100" type="submit">Submit Beneficiaries</button>
+                                </div>
+
+                                <!-- Cancel Link -->
+                                <div class="col-12">
+                                    <p class="small mb-0">Want to go back? <a href="{% url 'register' %}">Return</a></p>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const beneficiariesForms = document.getElementById("beneficiaries-forms");
+        const addBeneficiaryButton = document.getElementById("add-beneficiary-button");
+        let beneficiaryIndex = 1;
+
+        addBeneficiaryButton.addEventListener("click", function () {
+            beneficiaryIndex++;
+            const newForm = document.getElementById("beneficiary-form-template").cloneNode(true);
+            newForm.id = "";
+            newForm.querySelectorAll("input, select").forEach(input => {
+                input.name = input.name.replace(/\d+/, beneficiaryIndex);
+                input.value = "";
+            });
+            newForm.querySelector(".beneficiary-counter").textContent = beneficiaryIndex;
+            beneficiariesForms.appendChild(newForm);
+        });
+    });
+</script>
+{% endblock content %}

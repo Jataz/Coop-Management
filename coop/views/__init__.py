@@ -1,4 +1,4 @@
-from .users.login import signup,signin,user_logout_view
+from .users.login import signup,signin,user_logout_view,beneficiary_details,registration_payment
 from .users.otp import verify_email,resend_otp
 
 from .dashboard import index

@@ -28,8 +28,10 @@ urlpatterns = [
     
     #User Registration
     path("register/", views.signup, name="register"),
-    path("verify-email/<slug:username>", views.verify_email, name="verify-email"),
-    path("resend-otp/", views.resend_otp, name="resend-otp"),
+    #path("verify-email/<slug:username>", views.verify_email, name="verify-email"),
+    #path("resend-otp/", views.resend_otp, name="resend-otp"),
     path("login/", views.signin, name="login"),
     path('logout/', views.user_logout_view, name='logout'),
+    path('beneficiary-details/', views.beneficiary_details, name='beneficiary-details'),
+    path('registration-payment/', views.registration_payment, name='registration-payment'),
 ]

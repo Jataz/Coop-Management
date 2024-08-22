@@ -1,0 +1,94 @@
+{% extends 'layouts/auth_base.html' %}
+
+{% block title %} Payment {% endblock title %}
+
+{% block bodyclass %} Payment-Page {% endblock bodyclass %}
+
+{% block content %}
+<div class="container">
+    <section class="section payment-form min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-6 col-md-8 d-flex flex-column align-items-center justify-content-center">
+                    
+                    <div class="d-flex justify-content-center py-4">
+                        <a href="index.html" class="logo d-flex align-items-center w-auto">
+                            <img src="assets/img/logo.png" alt="Logo">
+                            <span class="d-none d-lg-block">Women Development</span>
+                        </a>
+                    </div><!-- End Logo -->
+
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="pt-4 pb-2">
+                                <h5 class="card-title text-center pb-0 fs-4">Payment Details</h5>
+                                <p class="text-center small">Complete your payment to finalize the registration.</p>
+                            </div>
+
+                            <form method="post" class="row g-3 needs-validation" novalidate>
+                                {% csrf_token %}
+                                
+                                <!-- Display non-field errors -->
+                                {% if form.non_field_errors %}
+                                    {% for error in form.non_field_errors %}
+                                        <small class="text-danger mb-3">{{ error }}</small>
+                                    {% endfor %}
+                                {% endif %}
+
+                                <!-- Amount -->
+                                <div class="col-12">
+                                    <label for="amount" class="form-label">Amount</label>
+                                    <input type="text" id="amount" name="amount" class="form-control" value="{{ form.amount.value|default_if_none:'' }}" required>
+                                    {% if form.amount.errors %}
+                                        {% for error in form.amount.errors %}
+                                            <div class="invalid-feedback">{{ error }}</div>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+
+                                <!-- Payment Method -->
+                                <div class="col-12">
+                                    <label for="payment_method" class="form-label">Payment Method</label>
+                                    <select id="payment_method" name="payment_method" class="form-control" required>
+                                        <option value="">Select Method</option>
+                                        <option value="credit_card" {% if form.payment_method.value == 'credit_card' %}selected{% endif %}>Credit Card</option>
+                                        <option value="paypal" {% if form.payment_method.value == 'paypal' %}selected{% endif %}>PayPal</option>
+                                        <option value="bank_transfer" {% if form.payment_method.value == 'bank_transfer' %}selected{% endif %}>Bank Transfer</option>
+                                    </select>
+                                    {% if form.payment_method.errors %}
+                                        {% for error in form.payment_method.errors %}
+                                            <div class="invalid-feedback">{{ error }}</div>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+
+                                <!-- Payment Details -->
+                                <div class="col-12">
+                                    <label for="payment_details" class="form-label">Payment Details</label>
+                                    <textarea id="payment_details" name="payment_details" class="form-control" rows="3" required>{{ form.payment_details.value|default_if_none:'' }}</textarea>
+                                    {% if form.payment_details.errors %}
+                                        {% for error in form.payment_details.errors %}
+                                            <div class="invalid-feedback">{{ error }}</div>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+
+                                <!-- Submit Button -->
+                                <div class="col-12">
+                                    <button class="btn btn-primary w-100" type="submit">Submit Payment</button>
+                                </div>
+
+                                <!-- Cancel Link -->
+                                <div class="col-12">
+                                    <p class="small mb-0">Need to go back? <a href="{% url 'beneficiary-details' %}">Return</a></p>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+{% endblock content %}
