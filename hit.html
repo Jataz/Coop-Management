@@ -1,0 +1,385 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Pad</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+@keyframes count {
+      0%  { content: '10'; }
+      100% { content: '0'; }
+      10% { content: '15'; }
+      10% { content: '14'; }
+      10% { content: '13'; }
+      10% { content: '12'; }
+      10% { content: '11'; }
+      10% { content: '10'; }
+      10% { content: '9'; }
+      20% { content: '8'; }
+      30% { content: '7'; }
+      40% { content: '6'; }
+      50% { content: '5'; }
+      60% { content: '4'; }
+      70% { content: '3'; }
+      80% { content: '2'; }
+      90% { content: '1'; }
+    }
+  
+/* .loader {
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid green;
+  border-bottom: 16px solid green;
+  width: 120px;
+  height: 120px;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
+.inner2{
+    padding-top: 50px;
+  /* padding-right: 190px; */
+  /* padding-bottom: 50px;
+  padding-left: 190px;
+} */ 
+
+* , *::before, *::after {
+  padding: 0;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+body {
+ 
+  
+}
+
+.cont {
+  width: 265px;
+  height: 265px;
+  position: fixed;
+  text-align: center;
+  font-weight: bold;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  /*border: 2px solid #aaa;*/ 
+  border-radius: 50%;
+  /*overflow: hidden;*/
+  background-color: green; 
+   
+  
+  &::after {
+    content: '';
+    width: 250px;
+    height: 250px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* border: 1px solid #aaa; */
+    border-radius: 50%;
+     background: #079fe6;
+    /*background-image: */
+      linear-gradient(transparent calc(50% - 1px), #aaa calc(50% - 1px), #aaa calc(50% + 1px), transparent calc(50% + 1px)),
+      linear-gradient(90deg, transparent calc(50% - 1px), #aaa calc(50% - 1px), #aaa calc(50% + 1px), transparent calc(50% + 1px));
+
+  }  
+}
+
+.spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 125px;
+  height: 100px;
+  transform-origin: 0 0;
+  background-image: linear-gradient(#079fe6, transparent);
+  animation: spin 1s infinite linear;
+  
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(-360deg); }
+  }
+}
+
+.number {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 2;
+  transform: translate(-50%, -50%);
+  width: 250px;
+  height: 250px;
+  color: white;
+  
+  &::after {
+    content: '';
+    width: 250px;
+    height: 250px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-size: 150px;
+    line-height: 250px;
+    animation: count 30s infinite steps(30, start);
+  
+  }
+}
+
+
+
+
+    </style>
+</head>
+
+<!-- <nav class="navbar navbar-expand-lg navbar-light bg-light"> -->
+  <title>
+
+         HIT APPLY
+
+   
+
+    </title>
+
+    <link rel="icon" href=
+
+"https://apply.hit.ac.zw/dashboard/log/hitlogo.png"
+
+          type="image/x-icon">
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary" style="background-color: #e3f2fd; margin: 5px;">
+  <a class="navbar-brand" >
+    
+<img src="https://apply.hit.ac.zw/dashboard/log/hitlogo.png" style="border-radius:50px ; width: 100px; height: 70px;">
+
+</a>
+  <button class="navbar-toggler" type="button" href="https://apply.hit.ac.zw/dashboard/login/" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarText">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href=""> <span class="sr-only"></span></a>
+      </li>
+       <li class="nav-item active">
+        <a class="nav-link" href=""> </a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href=""> </a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href=""> </a>
+      </li>
+       <li class="nav-item active">
+        <a class="nav-link" href=""> </a>
+      </li>
+       <li class="nav-item active">
+        <a class="nav-link" href=""> </a>
+      </li>
+      
+    </ul>
+    <span class="navbar-text">
+     <a class="nav-link" href="/dashboard/login/"><b>RESUME(LOGIN)</b> </a>
+    </span>
+  </div>
+</nav>
+
+
+<body>
+
+<div id="form" class="container" style = " border: 5px solid #079fe6;">
+<br>
+<br>
+  <div class="row">
+  
+<div class="inner" >
+<form class="inner2" method="post"  action="accredit_submit.php"   autocomplete="off" >
+<br>
+<div class="form-group" >
+     <label><h6 style="color: black">FOR THOSE WHO ARE USING PAYMENT GATEWAY PLEASE ENTER THE PIN IN RANGE OF (0 TO 30 SECONDS)</h6></label>
+   
+</div>
+
+<div class="">
+<div class="form-group row">
+    <div class="col">
+        <center>
+      <img src="log/ecocash.png" style=" width: 100px; height: 100px;">
+      <br>
+      <input type="radio"  name="payment_type" value="ECOCASH" placeholder="First name" style = "padding:" >
+</center>
+    </div>
+    <div class="col">
+    <center>
+        <img src="log/onemoney.jpg" style=" width: 100px; height: 100px;">
+        
+        <br>
+       
+      <input type="radio"  name="payment_type" value="TELECASH" placeholder="Last name">
+</center>
+    </div>
+    <div class="col">
+        <center>
+        <img src="log/telecash.jfif" style=" width: 100px; height: 100px;"> 
+        <br>
+      <input type="radio"  name="payment_type" value="ONEMONEY" placeholder="Last name">
+</center>
+    </div>
+  </div>
+  
+  <div class="form-group" style=" color: black;">
+     <label>Confirm your mobile number</label>
+     <input type="text" id=""  name="phone" value="263786955664"  class="form-group" required >
+</div>
+
+
+<div class="form-group" style=" color: black;">
+     <label>$ AMOUNT ZIG</label> <h3>662 </h3>
+</div>
+
+  <div class="form-group" >
+    
+     <input type="submit" id="btn"  name="make_submit" value="MAKE PAYMENT"  class="btn btn-primary" style = "background-color:#079fe6; color:black">
+</div>
+  </div>
+
+</form>
+
+</div>
+<!-- <div class="col-6">
+
+
+
+    </div>
+</div>
+
+    <div class="col-sm">
+       One of three columns --
+      <form   method="post"  action="accredit_submit.php"   autocomplete="off" style="border: 2px solid black;background-color:#E5E4E2;">
+<br>
+  <div class="">
+  
+<div class="form-group" style="">
+     <label><h5 style="color: black">FOR THOSE WHO DID MANUAL PAYMENTS  (cash/pos/bank transfer)</h5></label>
+   
+</div>
+
+
+<div class="form-group" style=" color:red ;">
+     <label>ENTER RECEIPT NUMBER (get from finance) </label>
+     <input type="text" id=""  name="code" value=""  class="form-group" >
+</div>
+
+  <div class="form-group">
+    
+     <input type="submit" id="btn"  name="code_submit" value="CONFIRM CODE"  class="btn btn-primary" >
+</div> -->
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+         
+                   
+                </div>
+            </div>
+        </form>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        const btn = document.getElementById('btn');
+
+btn.addEventListener('click', () => {
+  const form = document.getElementById('form');
+
+  if (form.style.display === 'none') {
+    // 👇️ this SHOWS the form
+    form.style.display = 'block';
+  } else {
+    // 👇️ this HIDES the form
+    form.style.display = 'none';
+    $('body').append('<div class="cont"><div class="spinner"></div><span class="number"></span></div>');
+       $(window).on('load', function () {
+         setTimeout(removeLoader, 2000);
+       });
+       function removeLoader() {
+          $("#indicator").fadeOut(1000, function () {
+             $("#indicator").remove();
+          });
+       }
+  }
+});
+// $('body').append('<div style = "" id = "indicator"> <div class="loader"> </div> </div>');
+//       $(window).on('load', function () {
+//          setTimeout(removeLoader, 2000);
+//       });
+//       function removeLoader() {
+//          $("#indicator").fadeOut(1000, function () {
+//             $("#indicator").remove();
+//          });
+//         }
+
+    </script>
+    <script>
+    $(document).ready(function() {
+    $("#searchButton").click(function(e) {
+        e.preventDefault();
+        var registrationNumber = $("#registrationNumber").val();
+        var payment_type = $("#payment_type:checked").val();
+        var phone = $("#phone").val();
+        var cost = $("#cost").val();
+
+        $.ajax({
+            type: "POST",
+            url: "getdata.php",
+            data: { registrationNumber: registrationNumber, payment_type: payment_type, phone: phone,cost:cost},
+            dataType: "json",
+            success: function(data) {
+                if (data) {
+                    
+                    // sessionStorage.setItem("programmeid", data.programmeid);
+                    // sessionStorage.setItem("programmesession_id", data.programmesession_id);
+
+                    
+                     $("#registrationNumber").val(data.status);
+                    // $("#surname").val(data.surname);
+                    // $("#firstNames").val(data.firstnames);
+                    // $("#programme").val(data.programme_name);
+                    // $("#attendanceType").val(data.attendance_type_description);
+                     alert("successfull");
+                    
+                } else {
+                    alert("No student found with this registration number");
+                }
+            },
+            error: function() {
+                alert("An error occurred while processing your request.");
+            }
+        });
+    });
+
+
+
+});
+    </script>
+</body>
+</html>
