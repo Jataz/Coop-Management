@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from django.utils import timezone
 from decimal import Decimal
 import re
 import uuid
@@ -31,27 +32,32 @@ class CustomUser(AbstractUser):
         return self.email
 
     def save(self, *args, **kwargs):
-        # Only generate a membership number if it does not exist
         if not self.membership_no:
-            with transaction.atomic():
-                # Lock the table to prevent race conditions
-                last_member = CustomUser.objects.select_for_update().aggregate(Max('membership_no'))
-                last_number = last_member['membership_no__max']
-
-                if last_number:
-                    # Extract the last number and increment it
-                    match = re.match(r'CM(\d+)', last_number)
-                    if match:
-                        next_number = int(match.group(1)) + 1
-                    else:
-                        next_number = 1
-                else:
-                    next_number = 1
-
-                # Generate the new membership number
-                self.membership_no = f"CM{next_number}"
-
+            self.membership_no = self.generate_membership_no()
         super().save(*args, **kwargs)
+
+    def generate_membership_no(self):
+        now = timezone.now()
+        year_prefix = now.strftime('%y')  # e.g., '24' for 2024
+        year_prefix = f"{year_prefix}"
+        
+        # Get the highest current counter for this year
+        max_counter = CustomUser.objects.filter(membership_no__startswith=f"CM{year_prefix}").aggregate(
+            Max('membership_no')
+        )['membership_no__max']
+        
+        if max_counter:
+            # Extract the numeric part of the latest membership_no
+            latest_counter = int(max_counter[4:])  # Skip 'CM' and the year prefix
+            new_counter = latest_counter + 1
+        else:
+            # Start from 1 if no previous record exists
+            new_counter = 1
+        
+        # Format the new counter with leading zeros
+        counter_str = f"{new_counter:06d}"
+        
+        return f"CM{year_prefix}{counter_str}"
 
 class Beneficiary(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -59,31 +65,37 @@ class Beneficiary(models.Model):
     id_number = models.CharField(blank=True, max_length=20, unique=True)
     sex = models.CharField(blank=True, max_length=1, choices=[('M', 'Male'), ('F', 'Female')])
     full_name = models.CharField(blank=True, max_length=255)
-    
+
     def __str__(self):
         return self.full_name
 
     def save(self, *args, **kwargs):
         if not self.beneficiary_no:
-            with transaction.atomic():
-                # Lock the table to prevent race conditions
-                last_beneficiary = Beneficiary.objects.select_for_update().aggregate(Max('beneficiary_no'))
-                last_number = last_beneficiary['beneficiary_no__max']
-
-                if last_number:
-                    # Extract the last number and increment it
-                    match = re.match(r'BN(\d+)', last_number)
-                    if match:
-                        next_number = int(match.group(1)) + 1
-                    else:
-                        next_number = 1
-                else:
-                    next_number = 1
-
-                # Generate the new beneficiary number
-                self.beneficiary_no = f"BN{next_number}"
-
+            self.beneficiary_no = self.generate_beneficiary_no()
         super().save(*args, **kwargs)
+
+    def generate_beneficiary_no(self):
+        now = timezone.now()
+        year_prefix = now.strftime('%y')  # e.g., '24' for 2024
+        
+        # Get the highest current counter for this year
+        max_counter = Beneficiary.objects.filter(beneficiary_no__startswith=f"BM{year_prefix}").aggregate(
+            Max('beneficiary_no')
+        )['beneficiary_no__max']
+        
+        if max_counter:
+            # Extract the numeric part of the latest beneficiary_no
+            latest_counter = int(max_counter[4:])  # Skip 'BM' and the year prefix
+            new_counter = latest_counter + 1
+        else:
+            # Start from 1 if no previous record exists
+            new_counter = 1
+        
+        # Format the new counter with leading zeros
+        counter_str = f"{new_counter:06d}"
+        
+        return f"BM{year_prefix}{counter_str}"
+
         
 class Membership(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

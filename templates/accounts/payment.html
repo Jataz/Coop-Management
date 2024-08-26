@@ -5,6 +5,15 @@
 {% block bodyclass %} Payment-Page {% endblock bodyclass %}
 
 {% block content %}
+
+<style>
+    .alert-container {
+        position: fixed;
+        top: 1rem;
+        right: 1rem;
+        z-index: 1050; /* Bootstrap default z-index for alerts */
+    }
+</style>
 <div class="container">
     <section class="section payment-form min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
         <div class="container">
@@ -24,8 +33,12 @@
                                 <h5 class="card-title text-center pb-0 fs-4">Payment Details</h5>
                                 <p class="text-center small">Complete your payment to finalize the registration.</p>
                             </div>
+                            <!-- Alert Container -->
+                            <div id="alert-container" class="alert-container">
+                                <!-- Alerts will be injected here by JavaScript -->
+                            </div>
 
-                            <form method="post" class="row g-3 needs-validation" novalidate>
+                            <form id="payment-form" method="post" class="row g-3 needs-validation" novalidate>
                                 {% csrf_token %}
                                 <div class="col-md-6">
                                     <div class="form-group">
@@ -36,7 +49,7 @@
                                         </div>
                                     </div>
                                 </div>
-                    
+
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="amount">Amount:</label>
@@ -51,9 +64,10 @@
                                         </div>
                                     </div>
                                 </div>
-                    
+
                                 <div class="col-12">
-                                    <button type="submit" class="btn btn-primary">Pay Now</button>
+                                    <a class="btn btn-outline-success" href="#" onclick="window.history.back(); return false;">Cancel</a>
+                                    <button type="submit" class="btn btn-outline-primary">Pay Now</button>
                                 </div>
                             </form>
                         </div>
@@ -63,5 +77,55 @@
         </div>
     </section>
 </div>
+
+<script>
+    // Function to show alert
+    function showAlert(message, type) {
+        var alertContainer = document.getElementById('alert-container');
+        var alert = document.createElement('div');
+        alert.className = 'alert alert-' + type + ' alert-dismissible fade show';
+        alert.role = 'alert';
+        alert.innerHTML = '<i class="bi bi-' + (type === 'primary' ? 'star' : 'x-circle') + ' me-1"></i>' +
+            message +
+            '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
+        alertContainer.appendChild(alert);
+
+        // Auto-dismiss the alert after 5 seconds
+        setTimeout(function() {
+            var bsAlert = new bootstrap.Alert(alert);
+            bsAlert.close();
+        }, 5000);
+    }
+
+    // Handle form submission
+    document.getElementById('payment-form').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent default form submission
+
+        var formData = new FormData(this);
+
+        // Perform AJAX request
+        fetch("{% url 'registration-payment' %}", {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest' // To indicate an AJAX request
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showAlert(data.message, 'primary');
+                // Optionally redirect or reset the form here
+                // window.location.href = '/login'; // Example redirect
+            } else {
+                showAlert(data.message, 'danger');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showAlert('An unexpected error occurred. Please try again.', 'danger');
+        });
+    });
+</script>
 
 {% endblock content %}

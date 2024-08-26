@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from django.utils import timezone
 from django.shortcuts import render
 
@@ -67,49 +68,60 @@ def beneficiary_details(request):
     context = {"form": form, "user_data": user_data}
     return render(request, "accounts/beneficiary.html", context)
 
-
 def registration_payment1(request):
-    user_data = request.session.get('user_data')
-    beneficiary_data = request.session.get('beneficiary_data')
-
-    if not user_data or not beneficiary_data:
-        return redirect('register')
-
     if request.method == 'POST':
-        # Integrate payment gateway here
-        payment_successful = True  # Replace with actual payment processing logic
+        mobile_number = request.POST.get('mobile_number')
+        amount = request.POST.get('amount')  # Get amount from POST data
 
-        if payment_successful:
+        if not mobile_number or not amount:
+            return JsonResponse({'success': False, 'message': 'Mobile number and amount are required.'})
+
+        try:
+            amount = float(amount)  # Ensure amount is a number
+        except ValueError:
+            return JsonResponse({'success': False, 'message': 'Invalid amount format.'})
+
+        payment_data = {
+            'mobile_number': mobile_number,
+            'amount': amount
+        }
+        payment_response = charge_customer(payment_data)
+
+        if payment_response.get('success'):
             # Create the user only after payment is successful
-            user = CustomUser(
-                username=user_data['username'],
-                email=user_data['email'],
-                full_name=user_data['full_name'],
-                phone_number=user_data['phone_number'],
-                sex=user_data['sex'],
-                id_number=user_data['id_number'],
-                physical_address=user_data['physical_address'],
-                date_of_birth=user_data['date_of_birth'],
-                registration_fee_paid=True,
-                is_member=True
-            )
-            user.set_password(user_data['password'])  # Hash the password before saving
-            user.save()
+            user_data = request.session.get('user_data')
+            beneficiary_data = request.session.get('beneficiary_data')
 
-            # Create the beneficiary associated with the user
-            Beneficiary.objects.create(
-                user=user,
-                **beneficiary_data
-            )
+            if user_data and beneficiary_data:
+                user = CustomUser(
+                    username=user_data['username'],
+                    email=user_data['email'],
+                    full_name=user_data['full_name'],
+                    phone_number=user_data['phone_number'],
+                    sex=user_data['sex'],
+                    id_number=user_data['id_number'],
+                    physical_address=user_data['physical_address'],
+                    date_of_birth=user_data['date_of_birth'],
+                    registration_fee_paid=True,
+                    is_member=True
+                )
+                user.set_password(user_data['password'])  # Hash the password before saving
+                user.save()
 
-            # Clear session data after successful payment
-            request.session.pop('user_data', None)
-            request.session.pop('beneficiary_data', None)
-            messages.success(request, "Payment successful and details saved! You can now log in.")
-            return redirect('/login')
+                # Create the beneficiary associated with the user
+                Beneficiary.objects.create(
+                    user=user,
+                    **beneficiary_data
+                )
+
+                # Clear session data after successful payment
+                request.session.pop('user_data', None)
+                request.session.pop('beneficiary_data', None)
+                return JsonResponse({'success': True, 'message': 'Payment successful and details saved! You can now log in.'})
+            else:
+                return JsonResponse({'success': False, 'message': 'User data or beneficiary data missing.'})
         else:
-            messages.error(request, "Payment failed. Please try again.")
-            return redirect('registration-payment')
+            return JsonResponse({'success': False, 'message': payment_response.get('error', 'Payment failed. Please try again.')})
 
     return render(request, "accounts/payment.html")
 
