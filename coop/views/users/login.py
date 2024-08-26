@@ -1,3 +1,4 @@
+import logging
 from django.http import JsonResponse
 from django.utils import timezone
 from django.shortcuts import render
@@ -14,7 +15,9 @@ from django.core.mail import send_mail
 from django.contrib.auth import authenticate, login,logout
 from django.contrib.auth.hashers import make_password
 from .payment import charge_customer
+from django.db import transaction
 
+logger = logging.getLogger(__name__)
 
 def signupp(request):
     form = RegisterForm()
@@ -126,65 +129,69 @@ def registration_payment1(request):
     return render(request, "accounts/payment.html")
 
 def registration_payment(request):
-    user_data = request.session.get('user_data')
-    beneficiary_data = request.session.get('beneficiary_data')
+    if request.method == 'POST' and request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        user_data = request.session.get('user_data')
+        beneficiary_data = request.session.get('beneficiary_data')
 
-    if not user_data or not beneficiary_data:
-        return redirect('register')
+        if not user_data or not beneficiary_data:
+            return JsonResponse({'success': False, 'message': "Session data missing. Please register again."})
 
-    if request.method == 'POST':
         mobile_number = request.POST.get('mobile_number')
-        amount = request.POST.get('amount')  # Get amount from POST data
+        amount = request.POST.get('amount')
 
         if not mobile_number or not amount:
-            messages.error(request, "Mobile number and amount are required.")
-            return redirect('registration-payment')
+            return JsonResponse({'success': False, 'message': "Mobile number and amount are required."})
 
         try:
-            amount = float(amount)  # Ensure amount is a number
+            amount = float(amount)
+            if amount <= 0:
+                raise ValueError("Amount must be greater than zero.")
         except ValueError:
-            messages.error(request, "Invalid amount format.")
-            return redirect('registration-payment')
+            return JsonResponse({'success': False, 'message': "Invalid amount format. Please enter a valid number."})
+        
+        logger.info(f"Amount received: {amount}")
 
         payment_data = {
             'mobile_number': mobile_number,
             'amount': amount
         }
-        payment_response = charge_customer(payment_data)
+
+        try:
+            payment_response = charge_customer(payment_data)
+        except Exception as e:
+            return JsonResponse({'success': False, 'message': f"Payment processing error: {str(e)}"})
 
         if payment_response.get('success'):
-            # Create the user only after payment is successful
-            user = CustomUser(
-                username=user_data['username'],
-                email=user_data['email'],
-                full_name=user_data['full_name'],
-                phone_number=user_data['phone_number'],
-                sex=user_data['sex'],
-                id_number=user_data['id_number'],
-                physical_address=user_data['physical_address'],
-                date_of_birth=user_data['date_of_birth'],
-                registration_fee_paid=True,
-                is_member=True
-            )
-            user.set_password(user_data['password'])  # Hash the password before saving
-            user.save()
+            try:
+                with transaction.atomic():
+                    user = CustomUser(
+                        username=user_data['username'],
+                        email=user_data['email'],
+                        full_name=user_data['full_name'],
+                        phone_number=user_data['phone_number'],
+                        sex=user_data['sex'],
+                        id_number=user_data['id_number'],
+                        physical_address=user_data['physical_address'],
+                        date_of_birth=user_data['date_of_birth'],
+                        registration_fee_paid=True,
+                        is_member=True
+                    )
+                    user.set_password(user_data['password'])
+                    user.save()
 
-            # Create the beneficiary associated with the user
-            Beneficiary.objects.create(
-                user=user,
-                **beneficiary_data
-            )
+                    Beneficiary.objects.create(user=user, **beneficiary_data)
 
-            # Clear session data after successful payment
-            request.session.pop('user_data', None)
-            request.session.pop('beneficiary_data', None)
-            messages.success(request, "Payment successful and details saved! You can now log in.")
-            return redirect('/login')
+                    request.session.pop('user_data', None)
+                    request.session.pop('beneficiary_data', None)
+
+                    return JsonResponse({'success': True, 'message': "Payment successful and registration complete! You can now log in."})
+            except Exception as e:
+                return JsonResponse({'success': False, 'message': f"Registration error: {str(e)}"})
         else:
-            messages.error(request, payment_response.get('error', 'Payment failed. Please try again.'))
-            return redirect('registration-payment')
+            return JsonResponse({'success': False, 'message': payment_response.get('error', 'Payment failed. Please try again.')})
 
     return render(request, "accounts/payment.html")
+
 
 
 def signin(request):
