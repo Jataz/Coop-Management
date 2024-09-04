@@ -108,6 +108,7 @@ class Membership(models.Model):
 
 class Subscription(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    payment_ref_no = models.CharField(max_length=30, unique=True, blank=True, editable=False)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     start_date = models.DateField(auto_now_add=True)
     end_date = models.DateField()
@@ -115,6 +116,18 @@ class Subscription(models.Model):
     payment_date= models.DateField(auto_now_add=False,null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    
+    def save(self, *args, **kwargs):
+        if not self.payment_ref_no:
+            self.payment_ref_no = self.generate_payment_ref_no()
+        super().save(*args, **kwargs)
+
+    def generate_payment_ref_no(self):
+        now = datetime.now()
+        date_part = now.strftime('%y%m%d.%H%M')
+        unique_letter = random.choice(string.ascii_uppercase)
+        unique_part = ''.join(random.choices(string.ascii_uppercase + string.digits, k=5))
+        return f"S{date_part}.{unique_letter}{unique_part}"
 
 class ShareCapital(models.Model):
     user = user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

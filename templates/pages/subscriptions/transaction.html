@@ -39,6 +39,7 @@
               <thead>
                 <tr>
                   <th>No.</th>
+                  <th>Reference No.</th>
                   <th>Amount</th>
                   <th>Start Date</th>
                   <th>End Date</th>
@@ -49,6 +50,7 @@
                 {% for sub in subscriptions %}
                 <tr>
                   <td>{{ forloop.counter}}</td>
+                  <td>{{ sub.payment_ref_no}}</td>
                   <td style="color: green;">${{ sub.amount}}</td>
                   <td>{{ sub.start_date}}</td>
                   <td>{{ sub.end_date }}</td>

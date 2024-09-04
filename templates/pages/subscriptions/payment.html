@@ -3,13 +3,19 @@
 
 {% block title %} Subscription | Payment {% endblock title %}
 
-{% block extrastyle %}
-
-{% endblock extrastyle %}
 
 {% block bodyclass %} hold-transition sidebar-mini layout-fixed {% endblock bodyclass %}
 
 {% block content %}
+
+<style>
+  .alert-container {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      z-index: 1050; /* Bootstrap default z-index for alerts */
+  }
+</style>
 
   <div class="pagetitle">
     <nav>
@@ -22,25 +28,48 @@
   </div><!-- End Page Title -->
   <section class="section">
     <div class="row justify-content-center">
-      <div class="col-lg-6">
+      <div class="col-lg-6 col-md-8 d-flex flex-column align-items-center justify-content-center">
 
         <div class="card">
           <div class="card-body">
             <h5 class="card-title">Subscription Payment</h5>
 
+            <!-- Alert Container -->
+            <div id="alert-container" class="alert-container">
+              <!-- Alerts will be injected here by JavaScript -->
+            </div>
+
             <!-- Custom Styled Validation with Tooltips -->
-            <form method="post" class="row g-3 needs-validation" novalidate>
+            <form id="payment-form" method="post" class="row g-3 needs-validation" novalidate>
               {% csrf_token %}
-              <div class="col-md-12">
-                <div class="form-floating">
-                  <input type="number" step="0.01" class="form-control" name="amount" id="amount" placeholder="Make Payment" required>
-                  <label for="floatingName">Amount</label>
-                </div>
+              <div class="col-md-6">
+                  <div class="form-group">
+                      <label for="mobile_number">Mobile Number:</label>
+                      <input type="text" id="mobile_number" name="mobile_number" class="form-control" required>
+                      <div class="invalid-feedback">
+                          Please provide a valid mobile number.
+                      </div>
+                  </div>
+              </div>
+
+              <div class="col-md-6">
+                  <div class="form-group">
+                      <label for="amount">Amount:</label>
+                      <div class="input-group">
+                          <input type="number" id="amount" name="amount" value="20.00" step="0.01" class="form-control" required readonly>
+                          <div class="input-group-append">
+                              <span class="input-group-text">USD</span>
+                          </div>
+                      </div>
+                      <div class="invalid-feedback">
+                          Please provide a valid amount.
+                      </div>
+                  </div>
               </div>
               
               <div class="col-12">
                 <a class="btn  btn-outline-success"  href="{% url 'subscriptions-transactions'%}">Cancel</a>
-                <button class="btn  btn-outline-primary" type="submit">Make Payment</button>
+                <button type="submit" class="btn  btn-outline-primary">Make Payment</button>
               </div>
             </form><!-- End Custom Styled Validation with Tooltips -->
 
@@ -50,8 +79,62 @@
       </div>
     </div>
   </section>
+  
+  <script>
+    // Function to show alert
+    function showAlert(message, type) {
+        var alertContainer = document.getElementById('alert-container');
+        if (!alertContainer) {
+            alertContainer = document.createElement('div');
+            alertContainer.id = 'alert-container';
+            document.body.appendChild(alertContainer);
+        }
+        var alert = document.createElement('div');
+        alert.className = 'alert alert-' + type + ' alert-dismissible fade show';
+        alert.role = 'alert';
+        alert.innerHTML = '<i class="bi bi-' + (type === 'primary' ? 'star' : 'x-circle') + ' me-1"></i>' +
+            message +
+            '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
+        alertContainer.appendChild(alert);
+  
+        // Auto-dismiss the alert after 5 seconds
+        setTimeout(function() {
+            var bsAlert = new bootstrap.Alert(alert);
+            bsAlert.close();
+        }, 5000);
+    }
+  
+    // Handle form submission
+    document.getElementById('payment-form').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent default form submission
+  
+        var formData = new FormData(this);
+  
+        // Perform AJAX request
+        fetch("{% url 'subscriptions-payment' %}", {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest' // To indicate an AJAX request
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                showAlert(data.message, 'primary');
+                // Redirect after successful payment
+                setTimeout(function() {
+                    window.location.href = "{% url 'subscriptions-transactions' %}"; // Example redirect
+                }, 1000); // Slight delay to allow the alert to be seen
+            } else {
+                showAlert(data.message, 'danger');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showAlert('An unexpected error occurred. Please try again.', 'danger');
+        });
+    });
+  </script>
+  
 {% endblock content %}
-
-{% block extra_scripts %}
-
-{% endblock extra_scripts %}
