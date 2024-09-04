@@ -14,7 +14,8 @@ from django.contrib.auth import get_user_model
 from django.core.mail import send_mail
 from django.contrib.auth import authenticate, login,logout
 from django.contrib.auth.hashers import make_password
-from .payment import charge_customer
+#from .payment import charge_customer
+from ..payments.registration import charge_customer
 from django.db import transaction
 
 logger = logging.getLogger(__name__)

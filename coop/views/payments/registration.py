@@ -52,21 +52,6 @@ def charge_customer1(data):
         return {'error': str(e)}
     
 
-def generate_unique_reference():
-    # Option 1: Using UUID
-    unique_id = str(uuid.uuid4())
-    return f"REF-{unique_id}"
-
-    # Option 2: Using Timestamp and Random Number
-    # timestamp = int(time.time() * 1000)  # Current time in milliseconds
-    # random_number = random.randint(1000, 9999)  # Random number to ensure uniqueness
-    # return f"REF-{timestamp}-{random_number}"
-
-    # Option 3: Combining UUID and Timestamp
-    # timestamp = int(time.time() * 1000)  # Current time in milliseconds
-    # unique_id = str(uuid.uuid4())  # UUID for additional uniqueness
-    # return f"REF-{timestamp}-{unique_id}"
-
 def charge_customer(data):
     try:
         # Validate required fields
@@ -124,3 +109,18 @@ def charge_customer(data):
     except Exception as e:
         logger.error(f"Unexpected error: {str(e)}")
         return {'error': 'An unexpected error occurred.'}
+    
+def generate_unique_reference():
+    # Option 1: Using UUID
+    unique_id = str(uuid.uuid4())
+    return f"REF-{unique_id}"
+
+    # Option 2: Using Timestamp and Random Number
+    # timestamp = int(time.time() * 1000)  # Current time in milliseconds
+    # random_number = random.randint(1000, 9999)  # Random number to ensure uniqueness
+    # return f"REF-{timestamp}-{random_number}"
+
+    # Option 3: Combining UUID and Timestamp
+    # timestamp = int(time.time() * 1000)  # Current time in milliseconds
+    # unique_id = str(uuid.uuid4())  # UUID for additional uniqueness
+    # return f"REF-{timestamp}-{unique_id}"

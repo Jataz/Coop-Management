@@ -65,6 +65,7 @@ class Beneficiary(models.Model):
     id_number = models.CharField(blank=True, max_length=20, unique=True)
     sex = models.CharField(blank=True, max_length=1, choices=[('M', 'Male'), ('F', 'Female')])
     full_name = models.CharField(blank=True, max_length=255)
+    date_joined = models.DateTimeField(auto_now_add=True, null=True)
 
     def __str__(self):
         return self.full_name
