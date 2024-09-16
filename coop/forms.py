@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model
 
-from .models import Beneficiary, LoanApplication 
+from .models import Beneficiary, CustomUser, LoanApplication 
 
 
 
@@ -79,4 +79,19 @@ class LoanApplicationForm(forms.ModelForm):
 
     term_months = forms.IntegerField(label='Term (months)', min_value=1,
                                      widget=forms.NumberInput(attrs={'class': 'form-control', 'required': True}))
+    
+class UserProfileForm(forms.ModelForm):
+    class Meta:
+        model = CustomUser
+        fields = [
+            'full_name',
+            'email',
+            'phone_number',
+            'physical_address',
+            'date_of_birth',
+            'sex',
+        ]
+        widgets = {
+            'date_of_birth': forms.DateInput(attrs={'type': 'date'}),
+        }
     

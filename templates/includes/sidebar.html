@@ -43,10 +43,16 @@
                 </a>
             </li>
             <li>
+                <a class="{% if active_page == 'edit-profile' %}active{% endif %}" href="{% url 'edit-profile' %}">
+                    <i class="bi bi-circle"></i><span>Edit Profile</span>
+                </a>
+            </li>
+            <li>
                 <a class="{% if active_page == 'change-password' %}active{% endif %}" href="{% url 'change-password' %}">
                     <i class="bi bi-circle"></i><span>Change Password</span>
                 </a>
             </li>
+
         </ul>
     </li><!-- End Settings Nav -->
 

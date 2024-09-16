@@ -38,7 +38,7 @@ def process_payment(data):
 
         # Create payment
         payment = paynow.create_payment(payment_reference, customer_email)
-        payment.add('Registration Fee', data['amount'])
+        payment.add('Subscripstion Payment', data['amount'])
 
         # Log the payment creation details
         logger.info(f"Payment created: Reference {payment_reference}, Amount {data['amount']}")
