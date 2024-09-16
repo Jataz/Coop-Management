@@ -130,11 +130,90 @@ class Subscription(models.Model):
         return f"S{date_part}.{unique_letter}{unique_part}"
 
 class ShareCapital(models.Model):
-    user = user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
-    payment_date = models.DateField(auto_now_add=False,null=True)
+    payment_date = models.DateField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    @property
+    def total_payments(self):
+        return self.sharecapitalpartialpayment_set.aggregate(total=models.Sum('partial_payment'))['total'] or 0
+
+    @property
+    def is_fully_paid(self):
+        return self.total_payments >= self.amount
+class ShareCapitall(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)  # Tracks total payments
+    payment_date = models.DateField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    # Property to check if the user has fully paid the share capital
+    @property
+    def is_fully_paid(self):
+        # Compares the amount paid to the limit defined in settings
+        return self.amount >= settings.SHARE_CAPITAL_LIMIT
+
+    # Method to add a payment
+    def add_payment(self, payment_amount):
+        # Ensure the payment amount is positive
+        if payment_amount <= 0:
+            raise ValueError("Payment amount must be positive.")
+        
+        # Calculate the remaining amount needed to reach the capital limit
+        required_for_full_payment = settings.SHARE_CAPITAL_LIMIT - self.amount
+        
+        if payment_amount > required_for_full_payment:
+            # If payment exceeds the needed amount, the excess goes to savings
+            share_capital_payment = required_for_full_payment  # Amount needed for full payment
+            excess_amount = payment_amount - required_for_full_payment  # Remaining amount for savings
+        else:
+            # If the payment is within the limit, it is applied fully to share capital
+            share_capital_payment = payment_amount
+            excess_amount = 0  # No excess for savings
+        
+        # Update the total share capital payment
+        self.amount += share_capital_payment
+        self.save()
+        
+        # If there is an excess amount, it is transferred to savings
+        if excess_amount > 0:
+            # Retrieve or create the Savings object for the user
+            savings, created = Savings.objects.get_or_create(user=self.user)
+            # Add the excess amount to the user's savings
+            savings.add_amount(excess_amount)
+
+    # Override the save method to handle post-save logic
+    def save(self, *args, **kwargs):
+        # Save the ShareCapitall object first
+        super().save(*args, **kwargs)
+        
+        # Additional actions after saving can be handled here
+        if self.is_fully_paid:
+            # Optional: Trigger any logic when the share capital is fully paid
+            pass
+
+              
+class ShareCapitalPartialPayment(models.Model):
+    share_capital = models.ForeignKey(ShareCapital, on_delete=models.CASCADE)
+    partial_payment = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    partial_payment_date = models.DateField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Partial Payment for ShareCapital of ${self.partial_payment} on {self.partial_payment_date}"
+
+class Savings(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Savings for {self.user} of ${self.amount}"
 
 class SubscriptionPartialPayment(models.Model):
     subscription = models.ForeignKey(Subscription, on_delete=models.CASCADE)
@@ -145,16 +224,6 @@ class SubscriptionPartialPayment(models.Model):
 
     def __str__(self):
         return f"Partial Payment for Subscription of ${self.amount} on {self.date}"
-
-class ShareCapitalPartialPayment(models.Model):
-    share_capital = models.ForeignKey(ShareCapital, on_delete=models.CASCADE)
-    partial_payment = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
-    partial_payment_date = models.DateField(auto_now_add=False, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return f"Partial Payment for ShareCapital of ${self.amount} on {self.date}"
     
 class LoanTerm(models.Model):
     TERM_CHOICES = [

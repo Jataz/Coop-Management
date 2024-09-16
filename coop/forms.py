@@ -80,6 +80,17 @@ class LoanApplicationForm(forms.ModelForm):
     term_months = forms.IntegerField(label='Term (months)', min_value=1,
                                      widget=forms.NumberInput(attrs={'class': 'form-control', 'required': True}))
     
+    
+
+class ShareCapitalForm(forms.Form):
+    amount = forms.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        min_value=0,
+        required=True,
+        label="Payment Amount"
+    )
+    
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = CustomUser

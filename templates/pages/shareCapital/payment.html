@@ -28,8 +28,23 @@
           <div class="card-body">
             <h5 class="card-title">Share Capital Payment</h5>
 
+            {% if messages %}
+            <div class="messages">
+              {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                  {{ message }}
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+
+            <!-- Alert Container -->
+            <div id="alert-container" class="alert-container">
+              <!-- Alerts will be injected here by JavaScript -->
+            </div>
+
             <!-- Custom Styled Validation with Tooltips -->
-            <form method="post" class="row g-3 needs-validation" novalidate>
+            <form id="payment-form" method="post" class="row g-3 needs-validation" novalidate>
               {% csrf_token %}
               <div class="col-md-12">
                 <div class="form-floating">
@@ -51,6 +66,63 @@
       </div>
     </div>
   </section>
+
+  <script>
+    // Function to show alert
+    function showAlert(message, type) {
+        var alertContainer = document.getElementById('alert-container');
+        if (!alertContainer) {
+            alertContainer = document.createElement('div');
+            alertContainer.id = 'alert-container';
+            document.body.appendChild(alertContainer);
+        }
+        var alert = document.createElement('div');
+        alert.className = 'alert alert-' + type + ' alert-dismissible fade show';
+        alert.role = 'alert';
+        alert.innerHTML = '<i class="bi bi-' + (type === 'primary' ? 'star' : 'x-circle') + ' me-1"></i>' +
+            message +
+            '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
+        alertContainer.appendChild(alert);
+  
+        // Auto-dismiss the alert after 5 seconds
+        setTimeout(function() {
+            var bsAlert = new bootstrap.Alert(alert);
+            bsAlert.close();
+        }, 5000);
+    }
+  
+    // Handle form submission
+    document.getElementById('payment-form').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent default form submission
+  
+        var formData = new FormData(this);
+  
+        // Perform AJAX request
+        fetch("{% url 'share-capital-payment' %}", {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest' // To indicate an AJAX request
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                showAlert(data.message, 'primary');
+                // Redirect after successful payment
+                setTimeout(function() {
+                    window.location.href = "{% url 'share-capital-transactions' %}"; // Example redirect
+                }, 1000); // Slight delay to allow the alert to be seen
+            } else {
+                showAlert(data.message, 'danger');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showAlert('An unexpected error occurred. Please try again.', 'danger');
+        });
+    });
+  </script>
 {% endblock content %}
 
 {% block extra_scripts %}
