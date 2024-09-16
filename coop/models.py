@@ -131,20 +131,6 @@ class Subscription(models.Model):
 
 class ShareCapital(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
-    payment_date = models.DateField(null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    @property
-    def total_payments(self):
-        return self.sharecapitalpartialpayment_set.aggregate(total=models.Sum('partial_payment'))['total'] or 0
-
-    @property
-    def is_fully_paid(self):
-        return self.total_payments >= self.amount
-class ShareCapitall(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)  # Tracks total payments
     payment_date = models.DateField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
