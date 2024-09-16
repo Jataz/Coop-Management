@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
+from decimal import Decimal
 import os
 from pathlib import Path
 
@@ -151,3 +152,4 @@ PAYNOW_INTEGRATION_ID = '19095'
 PAYNOW_INTEGRATION_KEY = 'bfaf70ac-8493-4abd-a640-d2099ff3df13'
 #Share capital limi
 SHARE_CAPITAL_LIMIT = 1000  
+MIN_SAVINGS_THRESHOLD = Decimal('1000.00')

@@ -20,7 +20,7 @@ def share_transactions(request):
 
 
 @login_required(login_url="/login")
-def share_payment(request):
+def share_payment1(request):
     if request.method == 'POST':
         form = ShareCapitalForm(request.POST)
 
@@ -49,3 +49,42 @@ def share_payment(request):
         form = ShareCapitalForm()
 
     return render(request, 'pages/shareCapital/payment.html', {'form': form, 'active_page': 'share-capital-payment'})
+
+import logging
+
+logger = logging.getLogger(__name__)
+
+@login_required(login_url="/login")
+def share_payment(request):
+    if request.method == 'POST':
+        form = ShareCapitalForm(request.POST)
+
+        if form.is_valid():
+            amount = form.cleaned_data['amount']
+            user = request.user
+
+            try:
+                # Try to fetch the first ShareCapital instance for this user
+                share_capital = ShareCapital.objects.filter(user=user).first()
+
+                # If no ShareCapital record exists, create a new one
+                if not share_capital:
+                    share_capital = ShareCapital.objects.create(user=user, amount=0)
+
+                # Add payment and handle possible errors
+                share_capital.add_payment(amount)
+                return JsonResponse({'status': 'success', 'message': 'Payment processed successfully.'}, status=200)
+
+            except Exception as e:
+                # Log the error
+                logger.error(f"Error processing payment: {str(e)}")
+                return JsonResponse({'status': 'error', 'message': 'Internal Server Error.'}, status=500)
+        else:
+            error_message = form.errors.as_json()
+            return JsonResponse({'status': 'error', 'message': 'Invalid form submission.', 'errors': error_message}, status=400)
+
+    else:
+        form = ShareCapitalForm()
+
+    return render(request, 'pages/shareCapital/payment.html', {'form': form, 'active_page': 'share-capital-payment'})
+
