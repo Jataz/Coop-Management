@@ -226,7 +226,7 @@ class Savings(models.Model):
         if amount <= 0:
             raise ValueError("Amount to add must be positive.")
         
-        # Convert amount to Decimal if it's not already
+        # Ensure amount is a Decimal
         amount = Decimal(amount)
         
         self.amount += amount
